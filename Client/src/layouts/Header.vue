@@ -15,6 +15,7 @@
         <q-toolbar-title>
           Academy UFF
         </q-toolbar-title>
+        <q-search color="white" inverted-light v-model="search" placeholder="Buscar" @keyup.enter="makeSearch"/>
       </q-toolbar>
     </q-layout-header>
 
@@ -64,11 +65,15 @@ export default {
   name: 'MyLayout',
   data () {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
+      leftDrawerOpen: false,
+      search: ''
     }
   },
   methods: {
-    openURL
+    openURL,
+    makeSearch () {
+      this.$router.push(`search?q=${this.search}`)
+    }
   }
 }
 </script>
