@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-layout-header>
+    <q-layout-header reveal :reveal-offset="1">
       <q-toolbar color="primary">
         <q-btn
           flat
@@ -13,20 +13,26 @@
         </q-btn>
 
         <div class="row q-mr-sm">
-          <div class="col-md-12">
+          <div class="col-md-12 col-sm-7">
             <q-toolbar-title>
               Academy UFF
             </q-toolbar-title>
           </div>
         </div>
-        <div :class="$q.platform.is.desktop ? 'col-md-7 q-mr-auto' : 'col-sm-12 full-width'">
+
+        <div class="col-md-6">
           <q-search color="white" inverted-light v-model="search" placeholder="Buscar" @keyup.enter="makeSearch"/>
         </div>
+
+        <q-btn-dropdown icon="shopping_cart" flat class="q-ml-auto">
+          <div style="height:10vh; padding:20px">Some text as content cart</div>
+        </q-btn-dropdown>
+
         <div v-if="$q.platform.is.desktop">
-          <q-btn icon="shopping_cart" rounded flat class="q-mr-sm"/>
-          <q-btn color="tertiary" inverted label="Fazer Login" class="q-mr-sm"/>
+          <q-btn color="white" outline label="Fazer Login" class="q-mr-sm"/>
           <q-btn color="negative" label="Cadastre-se" />
         </div>
+
       </q-toolbar>
     </q-layout-header>
 
