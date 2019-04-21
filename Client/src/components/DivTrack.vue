@@ -1,0 +1,28 @@
+<template>
+  <q-list inset-separator>
+    <q-collapsible :label="title">
+      <div class="row gutter-sm q-pl-md q-pr-md q-mb-md">
+        <div class="col-md-4" v-for="course in courses" :key="course.id">
+        <DivCourse
+          :name="course.name"
+          :about="course.about"
+          :value="course.value"/>
+        </div>
+      </div>
+    </q-collapsible>
+  </q-list>
+</template>
+
+<script>
+import DivCourseVue from './DivCourse.vue'
+export default {
+  name: 'DivTack',
+  components: {
+    DivCourse: DivCourseVue
+  },
+  props: {
+    title: String,
+    courses: Array
+  }
+}
+</script>

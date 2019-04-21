@@ -8,7 +8,7 @@
       <q-rating slot="subtitle" v-model="stars" :max="5" :title="stars" readonly/>
     </q-card-title>
     <q-card-main>
-      <p class="text-faded">{{about}}</p>
+      <p class="text-faded" :title="about">{{about.length > 50 && $q.platform.is.desktop ? `${about.substring(0,50)}...` : about}}</p>
       <p style="font-size: 20px"><b>Valor:</b> R$ {{value}}</p>
     </q-card-main>
     <q-card-separator />
