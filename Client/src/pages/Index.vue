@@ -13,181 +13,21 @@
 
     <div class="row gutter-sm q-pl-md q-pr-md q-mb-md">
       <div class="col-md-12"><h1 class="q-display-2">Cursos</h1></div>
-      <div class="col-md-3">
-        <q-card inline style="height:100%">
-          <q-card-media>
-            <img src="~assets/prog1.jpg">
-          </q-card-media>
-          <q-card-title>
-            Programação de Computadores 1
-            <q-rating slot="subtitle" v-model="stars" :max="5" />
-          </q-card-title>
-          <q-card-main>
-            <p class="text-faded">Curso com foco para pessoas que nunca tiveram contato com programação.</p>
-            <p style="font-size: 20px"><b>Valor:</b> R$ 30,99</p>
-          </q-card-main>
-          <q-card-separator />
-          <q-card-actions class="justify-center">
-            <q-btn flat color="primary" label="Adicionar ao carrinho" />
-          </q-card-actions>
-        </q-card>
-      </div>
-      <div class="col-md-3">
-        <q-card inline style="height:100%">
-          <q-card-media>
-            <img src="~assets/prog1.jpg">
-          </q-card-media>
-          <q-card-title>
-            Programação de Computadores 2
-            <q-rating slot="subtitle" v-model="stars" :max="5" />
-          </q-card-title>
-          <q-card-main>
-            <p class="text-faded">Para quem terminou programação de computadores 1.</p>
-            <p style="font-size: 20px"><b>Valor:</b> R$ 30,99</p>
-          </q-card-main>
-          <q-card-separator />
-          <q-card-actions class="justify-center">
-            <q-btn flat color="primary" label="Adicionar ao carrinho" />
-          </q-card-actions>
-        </q-card>
-      </div>
-      <div class="col-md-3">
-        <q-card inline style="height:100%">
-          <q-card-media>
-            <img src="~assets/prog1.jpg">
-          </q-card-media>
-          <q-card-title>
-            Estrutura de Dados
-            <q-rating slot="subtitle" v-model="stars" :max="5" />
-          </q-card-title>
-          <q-card-main>
-            <br>
-            <p class="text-faded">Curso com foco para pessoas que nunca tiveram contato com programação.</p>
-            <p style="font-size: 20px"><b>Valor:</b> R$ 30,99</p>
-            <br>
-          </q-card-main>
-          <q-card-separator />
-          <q-card-actions class="justify-center">
-            <q-btn flat color="primary" label="Adicionar ao carrinho" />
-          </q-card-actions>
-        </q-card>
-      </div>
-      <div class="col-md-3">
-        <q-card inline style="height:100%">
-          <q-card-media>
-            <img src="~assets/prog1.jpg">
-          </q-card-media>
-          <q-card-title>
-            Estrutura de Dados 2
-            <q-rating slot="subtitle" v-model="stars" :max="5" />
-          </q-card-title>
-          <q-card-main>
-            <br>
-            <p class="text-faded">Curso com foco para pessoas que nunca tiveram contato com programação.</p>
-            <p style="font-size: 20px"><b>Valor:</b> R$ 30,99</p>
-            <br>
-          </q-card-main>
-          <q-card-separator />
-          <q-card-actions class="justify-center">
-            <q-btn flat color="primary" label="Adicionar ao carrinho" />
-          </q-card-actions>
-        </q-card>
+      <div class="col-md-3" v-for="course in courses" :key="course.id">
+        <DivCourse
+          :name="course.name"
+          :about="course.about"
+          :value="course.value"/>
       </div>
     </div>
 
     <div class="row gutter-sm q-pl-md q-pr-md q-mb-md">
       <div class="col-md-12"><h1 class="q-display-2">Professores</h1></div>
-      <div class="col-md-2">
-        <q-card inline style="height:100%">
-          <q-card-media>
-            <img src="~assets/teacher.png">
-          </q-card-media>
-          <q-card-title>
-            Professor 1
-            <q-rating slot="subtitle" v-model="stars" :max="5" />
-            <div slot="right" class="row items-center">
-              <q-icon name="place" /> UFF
-            </div>
-          </q-card-title>
-          <q-card-main>
-            <br>
-            <p class="text-faded">Professor formado em Ciência da Computação.</p>
-            <br>
-          </q-card-main>
-          <q-card-separator />
-          <q-card-actions class="justify-center">
-            <q-btn flat color="primary" label="Ver Perfil" />
-          </q-card-actions>
-        </q-card>
-      </div>
-      <div class="col-md-2">
-        <q-card inline style="height:100%">
-          <q-card-media>
-            <img src="~assets/teacher.png">
-          </q-card-media>
-          <q-card-title>
-            Professor 2
-            <q-rating slot="subtitle" v-model="stars" :max="5" />
-            <div slot="right" class="row items-center">
-              <q-icon name="place" /> UERJ
-            </div>
-          </q-card-title>
-          <q-card-main>
-            <br>
-            <p class="text-faded">Professor formado em Ciência da Computação.</p>
-            <br>
-          </q-card-main>
-          <q-card-separator />
-          <q-card-actions class="justify-center">
-            <q-btn flat color="primary" label="Ver Perfil" />
-          </q-card-actions>
-        </q-card>
-      </div>
-      <div class="col-md-2">
-        <q-card inline style="height:100%">
-          <q-card-media>
-            <img src="~assets/teacher.png">
-          </q-card-media>
-          <q-card-title>
-            Professor 3
-            <q-rating slot="subtitle" v-model="stars" :max="5" />
-            <div slot="right" class="row items-center">
-              <q-icon name="place" /> PUC
-            </div>
-          </q-card-title>
-          <q-card-main>
-            <br>
-            <p class="text-faded">Professor formado em Ciência da Computação.</p>
-            <br>
-          </q-card-main>
-          <q-card-separator />
-          <q-card-actions class="justify-center">
-            <q-btn flat color="primary" label="Ver Perfil" />
-          </q-card-actions>
-        </q-card>
-      </div>
-      <div class="col-md-2">
-        <q-card inline style="height:100%">
-          <q-card-media>
-            <img src="~assets/teacher.png">
-          </q-card-media>
-          <q-card-title>
-            Professor 4
-            <q-rating slot="subtitle" v-model="stars" :max="5" />
-            <div slot="right" class="row items-center">
-              <q-icon name="place" /> UFRJ
-            </div>
-          </q-card-title>
-          <q-card-main>
-            <br>
-            <p class="text-faded">Professor formado em Ciência da Computação.</p>
-            <br>
-          </q-card-main>
-          <q-card-separator />
-          <q-card-actions class="justify-center">
-            <q-btn flat color="primary" label="Ver Perfil" />
-          </q-card-actions>
-        </q-card>
+      <div class="col-md-3" v-for="professor in professors" :key="professor.id">
+        <DivProfessor
+          :name="professor.name"
+          :work="professor.work"
+          :about="professor.about" />
       </div>
     </div>
   </q-page>
@@ -197,11 +37,30 @@
 </style>
 
 <script>
+import DivProfessorVue from '../components/DivProfessor.vue'
+import DivCourseVue from '../components/DivCourse.vue'
+
 export default {
   name: 'PageIndex',
+  components: {
+    DivProfessor: DivProfessorVue,
+    DivCourse: DivCourseVue
+  },
   data () {
     return {
-      stars: 4
+      stars: 4,
+      courses: [
+        { id: '1', name: 'Programação de Computadores 1', about: 'Curso com foco para pessoas que nunca tiveram contato com programação.', value: '30,99' },
+        { id: '2', name: 'Programação de Computadores 2', about: 'Para quem terminou programação de computadores 1.', value: '30,99' },
+        { id: '3', name: 'Estrutura de Dados 1', about: 'Para quem terminou programação de computadores 2.', value: '30,99' },
+        { id: '4', name: 'Estrutura de Dados 2', about: 'Para quem terminou estrutura de dados 2.', value: '30,99' }
+      ],
+      professors: [
+        { id: '1', name: 'Professor 1', work: 'UFF', about: 'Professor formado em Ciência da Computação.' },
+        { id: '2', name: 'Professora 2', work: 'PUC', about: 'Professora formada em Ciência da Computação.' },
+        { id: '3', name: 'Professor 3', work: 'UERJ', about: 'Professor formado em Ciência da Computação.' },
+        { id: '4', name: 'Professora 4', work: 'UFRJ', about: 'Professora formada em Ciência da Computação.' }
+      ]
     }
   }
 }
