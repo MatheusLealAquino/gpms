@@ -11,7 +11,7 @@
       <q-carousel-slide img-src="statics/curso1.jpg" />
     </q-carousel>
 
-    <div class="row gutter-sm q-pl-md q-pr-md q-mb-md">
+    <div class="row gutter-sm q-pl-md q-pr-md q-mb-sm">
       <div class="col-md-12"><h1 class="q-display-2">Cursos</h1></div>
       <div class="col-md-3" v-for="course in courses" :key="course.id">
         <DivCourse
@@ -20,15 +20,21 @@
           :value="course.value"/>
       </div>
     </div>
+    <div class="row q-pl-md q-pr-md">
+      <div class="col-md-12"><q-btn class="float-right" label="Ver Todos Os Cursos"/></div>
+    </div>
 
-    <div class="row gutter-sm q-pl-md q-pr-md q-mb-md">
-      <div class="col-md-12"><h1 class="q-display-2">Professores</h1></div>
+    <div class="row gutter-sm q-pl-md q-pr-md q-mb-sm">
+      <div class="col-md-12"><h1 class="q-display-2">Docentes</h1></div>
       <div class="col-md-3" v-for="professor in professors" :key="professor.id">
         <DivProfessor
           :name="professor.name"
           :work="professor.work"
           :about="professor.about" />
       </div>
+    </div>
+    <div class="row q-pl-md q-pr-md">
+      <div class="col-md-12"><q-btn class="float-right" label="Ver Todos Docentes"/></div>
     </div>
 
     <div class="gutter-sm q-ml-md q-mr-md q-mt-md q-mb-md">
