@@ -37,11 +37,24 @@
             </q-card>
           </div>
         </div>
-        <div class="row justify-center">
-          <div class="col-md-7 col-12">
-            <h4>Avaliação</h4>
-          </div>
-        </div>
+      </div>
+    </div>
+    <div class="row space-inside q-mb-md">
+      <div class="col-sm-12 col-md-12">
+        <h2>Depoimentos</h2>
+        <q-input v-model="comment" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
+
+        <q-scroll-area style="width: 100%; height: 100%;">
+          <q-list inset-separator>
+            <q-item multiline v-for="testimonial in testimonials" v-bind:key="testimonial.id">
+              <p class="q-mr-md"> {{testimonial.name}} </p>
+              <q-item-main
+                :label="testimonial.text"
+              />
+              <q-item-side right :stamp="testimonial.date" />
+            </q-item>
+          </q-list>
+        </q-scroll-area>
       </div>
     </div>
   </q-page>
@@ -72,6 +85,7 @@ export default {
   data () {
     return {
       title: 'Programação de Computadores 1',
+      comment: '',
       stars: 0,
       views: 1,
       about: 'Aprenda lógica de Programação do ZERO e aplique os conhecimentos em um projeto real.',
@@ -92,8 +106,24 @@ export default {
 
       // Professor
       nameProfessor: 'Professor 1',
-      starsProfessor: 1
+      starsProfessor: 1,
+      testimonials: [
+        {
+          id: 1,
+          date: '01/05/2019',
+          text: 'How are you?',
+          name: 'Usuario 1'
+        },
+        {
+          id: 2,
+          date: '02/05/2019',
+          name: 'Usuario 2',
+          text: 'I\'m good, thank you!'
+        }
+      ]
     }
+  },
+  methods: {
   }
 }
 </script>
