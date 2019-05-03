@@ -15,9 +15,9 @@
       <div class="col-md-12"><h1 class="q-display-2">Cursos</h1></div>
       <div class="col-md-3" v-for="course in courses" :key="course.id">
         <DivCourse
-          :name="course.name"
+          :title="course.title"
           :about="course.about"
-          :value="course.value"/>
+          :price="course.price"/>
       </div>
     </div>
     <div class="row q-pl-md q-pr-md">
@@ -81,6 +81,7 @@ import DivProfessorVue from '../components/DivProfessor.vue'
 import DivCourseVue from '../components/DivCourse.vue'
 import DivTrackVue from '../components/DivTrack.vue'
 import { easing } from 'quasar'
+import { CoursesService } from '../resource'
 
 export default {
   name: 'PageIndex',
@@ -93,10 +94,10 @@ export default {
     return {
       stars: 4,
       courses: [
-        { id: '1', name: 'Programação de Computadores 1', about: 'Curso com foco para pessoas que nunca tiveram contato com programação.', value: '30,99' },
-        { id: '2', name: 'Programação de Computadores 2', about: 'Para quem terminou programação de computadores 1.', value: '30,99' },
-        { id: '3', name: 'Estrutura de Dados 1', about: 'Para quem terminou programação de computadores 2.', value: '30,99' },
-        { id: '4', name: 'Estrutura de Dados 2', about: 'Para quem terminou estrutura de dados 2 e os cursos de programação de computadores.', value: '30,99' }
+        { id: '1', title: 'Programação de Computadores 1', about: 'Curso com foco para pessoas que nunca tiveram contato com programação.', price: 30.99 },
+        { id: '2', title: 'Programação de Computadores 2', about: 'Para quem terminou programação de computadores 1.', price: 30.99 },
+        { id: '3', title: 'Estrutura de Dados 1', about: 'Para quem terminou programação de computadores 2.', price: 30.99 },
+        { id: '4', title: 'Estrutura de Dados 2', about: 'Para quem terminou estrutura de dados 2 e os cursos de programação de computadores.', price: 30.99 }
       ],
       professors: [
         { id: '1', name: 'Professor 1', work: 'UFF', about: 'Professor formado em Ciência da Computação.' },
@@ -116,11 +117,19 @@ export default {
       ]
     }
   },
+  methods: {
+    getCourse () {
+      CoursesService.fetch('').then(res => {
+        this.courses = res.data
+      })
+    }
+  },
   mounted () {
     this.traks = [
       { id: '1', title: 'Carreira Front-End', courses: this.courses },
       { id: '2', title: 'Carreira Back-End', courses: this.courses }
     ]
+    this.getCourse()
   }
 }
 </script>

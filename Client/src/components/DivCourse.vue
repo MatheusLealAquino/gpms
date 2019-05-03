@@ -4,12 +4,12 @@
       <img src="~assets/prog1.jpg">
     </q-card-media>
     <q-card-title>
-      <div :title="name">{{name.length > 26 && $q.platform.is.desktop ? `${name.substring(0,26)}...` : name}}</div>
+      <div :title="title">{{title.length > 26 && $q.platform.is.desktop ? `${title.substring(0,26)}...` : title}}</div>
       <q-rating slot="subtitle" v-model="stars" :max="5" :title="stars" readonly/>
     </q-card-title>
     <q-card-main>
-      <p class="text-faded" :title="about">{{about.length > 50 && $q.platform.is.desktop ? `${about.substring(0,50)}...` : about}}</p>
-      <p style="font-size: 20px"><b>Valor:</b> R$ {{value}}</p>
+      <p class="text-faded" :title="about">{{about.length > 60 && $q.platform.is.desktop ? `${about.substring(0,77)}...` : about}}</p>
+      <p style="font-size: 20px"><b>Valor:</b> R$ {{`${price}`.replace('.', ',')}}</p>
     </q-card-main>
     <q-card-separator />
     <q-card-actions class="justify-center">
@@ -23,10 +23,10 @@
 
 <script>
 export default {
-  name: 'DivCourse',
+  title: 'DivCourse',
   props: {
-    name: String,
-    value: String,
+    title: String,
+    price: Number,
     about: String,
     id: String
   },

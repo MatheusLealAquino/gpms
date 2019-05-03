@@ -1,6 +1,6 @@
 import HttpRequest from './HttpRequest'
 
-class CourseProvider extends HttpRequest {
+class CoursesProvider extends HttpRequest {
 }
 
-export default CourseProvider
+export default CoursesProvider

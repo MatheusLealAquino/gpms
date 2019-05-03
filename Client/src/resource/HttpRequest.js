@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_API || 'http://localhost:3000/api',
+  baseURL: 'https://gpws.herokuapp.com/api/',
   timeout: 120000
 })
 
