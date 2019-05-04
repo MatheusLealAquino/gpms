@@ -41,26 +41,33 @@
         link
         inset-delimiter
       >
-        <q-list-header>Essential Links</q-list-header>
-        <q-item @click.native="openURL('http://quasar-framework.org')">
-          <q-item-side icon="school" />
-          <q-item-main label="Docs" sublabel="quasar-framework.org" />
+        <q-item to="/">
+          <q-item-side icon="home" />
+          <q-item-main label="Início" />
         </q-item>
-        <q-item @click.native="openURL('https://github.com/quasarframework/')">
-          <q-item-side icon="code" />
-          <q-item-main label="GitHub" sublabel="github.com/quasarframework" />
+        <q-item to="/timeline">
+          <q-item-side icon="timeline" />
+          <q-item-main label="Timeline" />
         </q-item>
-        <q-item @click.native="openURL('https://discord.gg/5TDhbDg')">
-          <q-item-side icon="chat" />
-          <q-item-main label="Discord Chat Channel" sublabel="https://discord.gg/5TDhbDg" />
+        <q-item to="/cart">
+          <q-item-side icon="shopping_cart" />
+          <q-item-main label="Carrinho de Compras" />
         </q-item>
-        <q-item @click.native="openURL('http://forum.quasar-framework.org')">
-          <q-item-side icon="record_voice_over" />
-          <q-item-main label="Forum" sublabel="forum.quasar-framework.org" />
+        <q-item to="/myCourses">
+          <q-item-side icon="book" />
+          <q-item-main label="Meus cursos" />
         </q-item>
-        <q-item @click.native="openURL('https://twitter.com/quasarframework')">
-          <q-item-side icon="rss feed" />
-          <q-item-main label="Twitter" sublabel="@quasarframework" />
+        <q-item to="/singUp">
+          <q-item-side icon="input" />
+          <q-item-main label="Cadastre-se" />
+        </q-item>
+        <q-item to="/singIn">
+          <q-item-side icon="settings_power" />
+          <q-item-main label="Logar" />
+        </q-item>
+        <q-item to="/logout">
+          <q-item-side icon="exit_to_app" />
+          <q-item-main label="Sair" />
         </q-item>
       </q-list>
     </q-layout-drawer>

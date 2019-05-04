@@ -61,17 +61,16 @@
       height="45vh"
     >
       <q-carousel-slide
-        v-for="n in 7" :key="`anim-${n}`"
+        v-for="(testimony, index) in testimonies" :key="testimony.id"
         class="flex flex-center"
-        :class="`bg-${colors[n % 5]}`"
+        :class="`bg-${colors[index % 5]}`"
       >
         <div class="row justify-center">
           <div class="col-md-3">
             <img src="~assets/prog1.jpg" height="125" width="125" class="rounded-img">
           </div>
           <div class="col-md-7 q-pt-xl">
-            Acredito no aprendizado de longo prazo, e a Acedemy UFF é uma ótima plataforma para aprender com especialistas.
-            Aprendi muito e recomendo a todos os meus amigos.
+            {{testimony.text}}
           </div>
         </div>
       </q-carousel-slide>
@@ -90,7 +89,7 @@ import DivProfessorVue from '../components/DivProfessor.vue'
 import DivCourseVue from '../components/DivCourse.vue'
 import DivTrackVue from '../components/DivTrack.vue'
 import { easing } from 'quasar'
-import { CoursesService, ProfessorsService } from '../resource'
+import { CoursesService, ProfessorsService, TestimoniesService } from '../resource'
 
 export default {
   name: 'PageIndex',
@@ -102,14 +101,23 @@ export default {
   data () {
     return {
       stars: 4,
+
+      // Course
       searchCourse: '',
       coursesNotFound: false,
       coursesToShow: [],
       courses: [],
+
+      // Professor
       searchProfessor: '',
       professorNotFound: false,
       professorsToShow: [],
       professors: [],
+
+      // Testominy
+      testimonies: [],
+
+      // Trak
       traks: [],
       overshoot: easing.overshoot,
       colors: [
@@ -149,6 +157,10 @@ export default {
       let response = await ProfessorsService.fetch('')
       this.professors = response.data
       this.professorsToShow = this.professors.slice(0, 4)
+    },
+    async getTestimonies () {
+      let response = await TestimoniesService.fetch('', { filter: { limit: 4 } })
+      this.testimonies = response.data
     }
   },
   async mounted () {
@@ -158,6 +170,7 @@ export default {
       { id: '2', title: 'Carreira Back-End', courses: this.courses }
     ]
     this.getProfessors()
+    this.getTestimonies()
   }
 }
 </script>
