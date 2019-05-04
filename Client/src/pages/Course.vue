@@ -2,14 +2,14 @@
   <q-page>
     <div class="row gutter-sm header">
       <div class="col-sm-12 col-md-6 q-pt-md">
-        <img src="~assets/prog1.jpg" height="383px" class="round">
+        <img src="~assets/prog1.jpg" height="100%" class="round">
       </div>
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
-        <h2>{{title}}</h2>
-        <div class="q-subheading q-mb-sm">{{about}}</div>
-        <q-rating slot="subtitle" v-model="stars" :max="5" :title="stars" readonly/> {{stars}} ({{totalAvaliations}} {{totalAvaliations > 1 || totalAvaliations === 0 ? 'classficações' : 'classificação'}})
-        <br/> <small>{{views}} {{views > 1 || views === 0 ? 'Visualizações' : 'Visualização'}}</small>
-        <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{value}}</p>
+        <h2>{{course.title}}</h2>
+        <div class="q-subheading q-mb-sm">{{course.about}}</div>
+        <q-rating slot="subtitle" v-model="course.rate" :max="5" :title="stars" readonly/> {{course.rate}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classficações' : 'classificação'}})
+        <br/> <small>{{course.visualization}} {{course.visualization > 1 || course.visualization === 0 ? 'Visualizações' : 'Visualização'}}</small>
+        <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{`${course.price}`.replace('.', ',')}}</p>
         <q-btn label="Adicionar ao Carrinho" color="negative" text-color="white" class="full-width q-mb-md" />
         <q-btn label="Comprar" color="white" text-color="black" class="full-width q-mb-md" />
       </div>
@@ -17,7 +17,7 @@
     <div class="row gutter-sm space-inside">
       <div class="col-sm-12 col-md-6 col-12">
         <h4>Ementa</h4>
-        <p v-html="ementa"/>
+        <p v-html="course.menu"/>
       </div>
       <div class="col-sm-12 col-md-6 col-12">
         <div class="row justify-center">
@@ -28,11 +28,11 @@
                 <img src="~assets/teacher.png" height="180px" width="180px">
               </q-card-media>
               <q-card-title>
-                <div :title="nameProfessor">{{nameProfessor}}</div>
+                <div :title="professor.name">{{professor.name}}</div>
                 <q-rating slot="subtitle" v-model="starsProfessor" :max="5" :title="stars" readonly/>
               </q-card-title>
               <q-card-main>
-                <p class="text-faded">{{about}}</p>
+                <p class="text-faded">{{professor.about}}</p>
               </q-card-main>
             </q-card>
           </div>
@@ -80,10 +80,14 @@
 </style>
 
 <script>
+import { CoursesService, ProfessorsService } from '../resource'
+
 export default {
   name: 'Course',
   data () {
     return {
+      course: {},
+      professor: {},
       title: 'Programação de Computadores 1',
       comment: '',
       stars: 0,
@@ -106,7 +110,7 @@ export default {
 
       // Professor
       nameProfessor: 'Professor 1',
-      starsProfessor: 1,
+      starsProfessor: 5,
       testimonials: [
         {
           id: 1,
@@ -124,6 +128,29 @@ export default {
     }
   },
   methods: {
+    async getCourse (id) {
+      try {
+        let response = await CoursesService.fetch(id)
+        this.course = response.data
+      } catch (err) {
+        this.$router.push('/notFound')
+      }
+    },
+    async getProfessor (id) {
+      let response = await ProfessorsService.fetch(id)
+      this.professor = response.data
+    },
+    updateCourse (id, course) {
+      CoursesService.update(id, course)
+    },
+    getTestimonials (idCourse) {
+    }
+  },
+  async mounted () {
+    await this.getCourse(this.$route.params.id)
+    await this.getProfessor(this.course.professorId)
+    this.course.visualization++
+    this.updateCourse(this.course.id, this.course)
   }
 }
 </script>
