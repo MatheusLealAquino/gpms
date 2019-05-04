@@ -4,9 +4,9 @@
       <div class="row gutter-sm q-pl-md q-pr-md q-mb-md">
         <div class="col-md-4" v-for="course in courses" :key="course.id">
         <DivCourse
-          :name="course.name"
+          :title="course.title"
           :about="course.about"
-          :value="course.value"/>
+          :price="course.price"/>
         </div>
       </div>
     </q-collapsible>

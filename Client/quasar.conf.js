@@ -55,7 +55,9 @@ module.exports = function (ctx) {
         'QListHeader',
         'QItem',
         'QItemMain',
+        'QItemSeparator',
         'QItemSide',
+        'QItemTile',
         'QSearch',
         'QBtnDropdown',
         'QCarousel',
@@ -68,7 +70,9 @@ module.exports = function (ctx) {
         'QCardSeparator',
         'QCardActions',
         'QRating',
-        'QCollapsible'
+        'QCollapsible',
+        'QInput',
+        'QScrollArea'
       ],
       directives: [
         'Ripple'
