@@ -46,7 +46,7 @@
 
         <q-scroll-area style="width: 100%; height: 100%;">
           <q-list inset-separator>
-            <q-item multiline v-for="testimonial in testimonials" v-bind:key="testimonial.id">
+            <q-item multiline v-for="testimonial in testimonies" v-bind:key="testimonial.id">
               <p class="q-mr-md"> {{testimonial.name}} </p>
               <q-item-main
                 :label="testimonial.text"
@@ -90,11 +90,7 @@ export default {
       professor: {},
       title: 'Programação de Computadores 1',
       comment: '',
-      stars: 0,
-      views: 1,
       about: 'Aprenda lógica de Programação do ZERO e aplique os conhecimentos em um projeto real.',
-      totalAvaliations: 0,
-      value: '00,00',
       ementa: `<b>O que é Java?</b><br/>
               <ul>
                 <li>Introdução</li>
@@ -109,9 +105,8 @@ export default {
               </ul>`,
 
       // Professor
-      nameProfessor: 'Professor 1',
       starsProfessor: 5,
-      testimonials: [
+      testimonies: [
         {
           id: 1,
           date: '01/05/2019',
@@ -136,14 +131,16 @@ export default {
         this.$router.push('/notFound')
       }
     },
+    async getTestimonies (idCourse) {
+      let response = await CoursesService.fetch(`${idCourse}\testimonies`)
+      // this.course = response.data
+    },
     async getProfessor (id) {
       let response = await ProfessorsService.fetch(id)
       this.professor = response.data
     },
     updateCourse (id, course) {
       CoursesService.update(id, course)
-    },
-    getTestimonials (idCourse) {
     }
   },
   async mounted () {
