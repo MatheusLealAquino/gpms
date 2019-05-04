@@ -12,29 +12,38 @@
     </q-carousel>
 
     <div class="row gutter-sm q-pl-md q-pr-md q-mb-sm">
-      <div class="col-md-12"><h1 class="q-display-2">Cursos</h1></div>
-      <div class="col-md-3" v-for="course in courses" :key="course.id">
+      <div class="col-md-12">
+        <h1 class="q-display-2">Cursos</h1>
+      </div>
+      <div class="col-md-12">
+        <q-search color="white" inverted-light v-model="searchCourse" placeholder="Buscar cursos" @input="filterCourses"/>
+      </div>
+      <div class="col-md-12" v-if="coursesNotFound">
+        <p class="text-center text-fade">Nenhum curso encontrado!</p>
+      </div>
+      <div class="col-md-3" v-for="course in coursesToShow" :key="course.id">
         <DivCourse
           :title="course.title"
           :about="course.about"
           :price="course.price"/>
       </div>
     </div>
-    <div class="row q-pl-md q-pr-md">
-      <div class="col-md-12"><q-btn class="float-right" label="Ver Todos Os Cursos"/></div>
-    </div>
 
     <div class="row gutter-sm q-pl-md q-pr-md q-mb-sm">
       <div class="col-md-12"><h1 class="q-display-2">Docentes</h1></div>
-      <div class="col-md-3" v-for="professor in professors" :key="professor.id">
+      <div class="col-md-12">
+        <q-search color="white" inverted-light v-model="searchProfessor" placeholder="Buscar docentes" @input="filterProfessor"/>
+      </div>
+      <div class="col-md-12" v-if="professorNotFound">
+        <p class="text-center text-fade">Nenhum docente encontrado!</p>
+      </div>
+      <div class="col-md-3" v-for="professor in professorsToShow" :key="professor.id">
         <DivProfessor
           :name="professor.name"
-          :work="professor.work"
+          :educationInstitute="professor.educationInstitute"
+          :lattes="professor.lattes"
           :about="professor.about" />
       </div>
-    </div>
-    <div class="row q-pl-md q-pr-md">
-      <div class="col-md-12"><q-btn class="float-right" label="Ver Todos Docentes"/></div>
     </div>
 
     <div class="gutter-sm q-ml-md q-mr-md q-mt-md q-mb-md">
@@ -81,7 +90,7 @@ import DivProfessorVue from '../components/DivProfessor.vue'
 import DivCourseVue from '../components/DivCourse.vue'
 import DivTrackVue from '../components/DivTrack.vue'
 import { easing } from 'quasar'
-import { CoursesService } from '../resource'
+import { CoursesService, ProfessorsService } from '../resource'
 
 export default {
   name: 'PageIndex',
@@ -93,18 +102,14 @@ export default {
   data () {
     return {
       stars: 4,
-      courses: [
-        { id: '1', title: 'Programação de Computadores 1', about: 'Curso com foco para pessoas que nunca tiveram contato com programação.', price: 30.99 },
-        { id: '2', title: 'Programação de Computadores 2', about: 'Para quem terminou programação de computadores 1.', price: 30.99 },
-        { id: '3', title: 'Estrutura de Dados 1', about: 'Para quem terminou programação de computadores 2.', price: 30.99 },
-        { id: '4', title: 'Estrutura de Dados 2', about: 'Para quem terminou estrutura de dados 2 e os cursos de programação de computadores.', price: 30.99 }
-      ],
-      professors: [
-        { id: '1', name: 'Professor 1', work: 'UFF', about: 'Professor formado em Ciência da Computação.' },
-        { id: '2', name: 'Professora 2', work: 'PUC', about: 'Professora formada em Ciência da Computação.' },
-        { id: '3', name: 'Professor 3', work: 'UERJ', about: 'Professor formado em Ciência da Computação.' },
-        { id: '4', name: 'Professora 4', work: 'UFRJ', about: 'Professora formada em Ciência da Computação.' }
-      ],
+      searchCourse: '',
+      coursesNotFound: false,
+      coursesToShow: [],
+      courses: [],
+      searchProfessor: '',
+      professorNotFound: false,
+      professorsToShow: [],
+      professors: [],
       traks: [],
       overshoot: easing.overshoot,
       colors: [
@@ -118,18 +123,41 @@ export default {
     }
   },
   methods: {
-    getCourse () {
-      CoursesService.fetch('').then(res => {
-        this.courses = res.data
-      })
+    filterCourses () {
+      this.coursesToShow = this.courses.filter(course => {
+        if (course.title.toLowerCase().includes(this.searchCourse.toLowerCase()) ||
+        course.about.toLowerCase().includes(this.searchCourse.toLowerCase()) ||
+        course.price.toString().toLowerCase().includes(this.searchCourse.toLowerCase())) return true
+      }).slice(0, 4)
+      if (this.coursesToShow.length <= 0) this.coursesNotFound = true
+      else this.coursesNotFound = false
+    },
+    filterProfessor () {
+      this.professorsToShow = this.professors.filter(professor => {
+        if (professor.name.toLowerCase().includes(this.searchProfessor.toLowerCase()) ||
+        professor.lattes.toLowerCase().includes(this.searchProfessor.toLowerCase())) return true
+      }).slice(0, 4)
+      if (this.professorsToShow.length <= 0) this.professorNotFound = true
+      else this.professorNotFound = false
+    },
+    async getCourses () {
+      let response = await CoursesService.fetch('')
+      this.courses = response.data
+      this.coursesToShow = this.courses.slice(0, 4)
+    },
+    async getProfessors () {
+      let response = await ProfessorsService.fetch('')
+      this.professors = response.data
+      this.professorsToShow = this.professors.slice(0, 4)
     }
   },
-  mounted () {
+  async mounted () {
+    await this.getCourses()
     this.traks = [
       { id: '1', title: 'Carreira Front-End', courses: this.courses },
       { id: '2', title: 'Carreira Back-End', courses: this.courses }
     ]
-    this.getCourse()
+    this.getProfessors()
   }
 }
 </script>

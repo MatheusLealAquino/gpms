@@ -20,10 +20,6 @@
           </div>
         </div>
 
-        <div class="col-md-6">
-          <q-search color="white" inverted-light v-model="search" placeholder="Buscar" @keyup.enter="makeSearch"/>
-        </div>
-
         <q-btn-dropdown icon="shopping_cart" flat class="q-ml-auto">
           <div style="height:10vh; padding:20px">Some text as content cart</div>
         </q-btn-dropdown>
