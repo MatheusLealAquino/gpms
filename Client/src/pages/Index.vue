@@ -23,6 +23,7 @@
       </div>
       <div class="col-md-3" v-for="course in coursesToShow" :key="course.id">
         <DivCourse
+          :id="course.id"
           :title="course.title"
           :about="course.about"
           :price="course.price"/>
@@ -62,16 +63,14 @@
     >
       <q-carousel-slide
         v-for="(testimony, index) in testimonies" :key="testimony.id"
-        class="flex flex-center"
+        class="flex flex-center justify-center"
         :class="`bg-${colors[index % 5]}`"
       >
-        <div class="row justify-center">
-          <div class="col-md-3">
-            <img src="~assets/prog1.jpg" height="125" width="125" class="rounded-img">
-          </div>
-          <div class="col-md-7 q-pt-xl">
-            {{testimony.text}}
-          </div>
+        <div class="col-md-3 q-mb-sm">
+          <img src="~assets/profile-avatar.png" height="125" width="125" class="rounded-img">
+        </div>
+        <div class="col-md-7 q-pl-xl">
+          {{testimony.text}}
         </div>
       </q-carousel-slide>
     </q-carousel>
