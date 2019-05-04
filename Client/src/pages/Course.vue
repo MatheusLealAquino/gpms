@@ -7,7 +7,7 @@
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
         <h2>{{course.title}}</h2>
         <div class="q-subheading q-mb-sm">{{course.about}}</div>
-        <q-rating slot="subtitle" v-model="course.rate" :max="5" :title="stars" readonly/> {{course.rate}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classficações' : 'classificação'}})
+        <q-rating slot="subtitle" v-model="course.rate" :max="5" :title="course.rate" readonly/> {{course.rate}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classficações' : 'classificação'}})
         <br/> <small>{{course.visualization}} {{course.visualization > 1 || course.visualization === 0 ? 'Visualizações' : 'Visualização'}}</small>
         <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{`${course.price}`.replace('.', ',')}}</p>
         <q-btn label="Adicionar ao Carrinho" color="negative" text-color="white" class="full-width q-mb-md" />
@@ -29,7 +29,7 @@
               </q-card-media>
               <q-card-title>
                 <div :title="professor.name">{{professor.name}}</div>
-                <q-rating slot="subtitle" v-model="starsProfessor" :max="5" :title="stars" readonly/>
+                <q-rating slot="subtitle" v-model="starsProfessor" :max="5" :title="starsProfessor" readonly/>
               </q-card-title>
               <q-card-main>
                 <p class="text-faded">{{professor.about}}</p>
@@ -44,10 +44,10 @@
         <h2>Depoimentos</h2>
         <q-input v-model="comment" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
 
-        <q-scroll-area style="width: 100%; height: 100%;">
+        <q-scroll-area style="width: 100%; height: 70%;">
           <q-list inset-separator>
             <q-item multiline v-for="testimonial in testimonies" v-bind:key="testimonial.id">
-              <p class="q-mr-md"> {{testimonial.name}} </p>
+              <p class="q-mr-md"> Usuario {{testimonial.userId}} </p>
               <q-item-main
                 :label="testimonial.text"
               />
@@ -132,8 +132,8 @@ export default {
       }
     },
     async getTestimonies (idCourse) {
-      let response = await CoursesService.fetch(`${idCourse}\testimonies`)
-      // this.course = response.data
+      let response = await CoursesService.fetch(`${idCourse}/testimonies`)
+      this.testimonies = response.data
     },
     async getProfessor (id) {
       let response = await ProfessorsService.fetch(id)
@@ -146,6 +146,7 @@ export default {
   async mounted () {
     await this.getCourse(this.$route.params.id)
     await this.getProfessor(this.course.professorId)
+    this.getTestimonies(this.course.id)
     this.course.visualization++
     this.updateCourse(this.course.id, this.course)
   }
