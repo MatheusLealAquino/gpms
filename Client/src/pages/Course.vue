@@ -42,8 +42,14 @@
     <div class="row space-inside q-mb-md">
       <div class="col-sm-12 col-md-12">
         <h2>Depoimentos</h2>
-        <q-input v-model="comment" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
-
+        <div class="row">
+        <div class="col-md-11">
+          <q-input v-model="comment" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
+        </div>
+        <div class="col-md-1">
+          <q-btn icon="send" flat />
+        </div>
+        </div>
         <q-scroll-area style="width: 100%; height: 70%;">
           <q-list inset-separator>
             <q-item multiline v-for="testimonial in testimonies" v-bind:key="testimonial.id">
@@ -51,7 +57,7 @@
               <q-item-main
                 :label="testimonial.text"
               />
-              <q-item-side right :stamp="testimonial.date" />
+              <q-item-side right :stamp="new Date(testimonial.createdAt).toLocaleDateString('pt-br')" />
             </q-item>
           </q-list>
         </q-scroll-area>
@@ -88,7 +94,6 @@ export default {
     return {
       course: {},
       professor: {},
-      title: 'Programação de Computadores 1',
       comment: '',
       about: 'Aprenda lógica de Programação do ZERO e aplique os conhecimentos em um projeto real.',
       ementa: `<b>O que é Java?</b><br/>
