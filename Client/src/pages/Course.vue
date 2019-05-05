@@ -44,13 +44,13 @@
         <h2>Depoimentos</h2>
         <div class="row">
         <div class="col-md-11">
-          <q-input v-model="comment" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
+          <q-input v-model="testimony" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
         </div>
         <div class="col-md-1">
-          <q-btn icon="send" flat />
+          <q-btn icon="send" flat @click="createTestimonies"/>
         </div>
         </div>
-        <q-scroll-area style="width: 100%; height: 70%;">
+        <q-scroll-area style="width: 100%; height: 70%; margin-bottom:2%">
           <q-list inset-separator>
             <q-item multiline v-for="testimonial in testimonies" v-bind:key="testimonial.id">
               <p class="q-mr-md"> Usuario {{testimonial.userId}} </p>
@@ -94,8 +94,7 @@ export default {
     return {
       course: {},
       professor: {},
-      comment: '',
-      about: 'Aprenda lógica de Programação do ZERO e aplique os conhecimentos em um projeto real.',
+      testimony: '',
       ementa: `<b>O que é Java?</b><br/>
               <ul>
                 <li>Introdução</li>
@@ -111,20 +110,7 @@ export default {
 
       // Professor
       starsProfessor: 5,
-      testimonies: [
-        {
-          id: 1,
-          date: '01/05/2019',
-          text: 'How are you?',
-          name: 'Usuario 1'
-        },
-        {
-          id: 2,
-          date: '02/05/2019',
-          name: 'Usuario 2',
-          text: 'I\'m good, thank you!'
-        }
-      ]
+      testimonies: []
     }
   },
   methods: {
@@ -146,6 +132,19 @@ export default {
     },
     updateCourse (id, course) {
       CoursesService.update(id, course)
+    },
+    createTestimonies () {
+      if (this.testimony.length > 0) {
+        let testimony = {
+          text: this.testimony,
+          createdAt: new Date(),
+          testimoniableId: this.course.id,
+          testimoniableType: 'Course',
+          userId: 2
+        }
+        this.testimonies.push(testimony)
+        CoursesService.create(`${this.course.id}/testimonies`, testimony)
+      }
     }
   },
   async mounted () {
