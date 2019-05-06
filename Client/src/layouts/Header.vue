@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-layout-header>
+    <q-layout-header reveal :reveal-offset="1">
       <q-toolbar color="primary">
         <q-btn
           flat
@@ -12,10 +12,23 @@
           <q-icon name="menu" />
         </q-btn>
 
-        <q-toolbar-title>
-          Academy UFF
-        </q-toolbar-title>
-        <q-search color="white" inverted-light v-model="search" placeholder="Buscar" @keyup.enter="makeSearch"/>
+        <div class="row q-mr-sm">
+          <div class="col-md-12 col-sm-7">
+            <q-toolbar-title>
+              Academy UFF
+            </q-toolbar-title>
+          </div>
+        </div>
+
+        <q-btn-dropdown icon="shopping_cart" flat class="q-ml-auto">
+          <div style="height:10vh; padding:20px">Some text as content cart</div>
+        </q-btn-dropdown>
+
+        <div v-if="$q.platform.is.desktop">
+          <q-btn color="white" outline label="Fazer Login" class="q-mr-sm"/>
+          <q-btn color="negative" label="Cadastre-se" />
+        </div>
+
       </q-toolbar>
     </q-layout-header>
 
@@ -28,26 +41,33 @@
         link
         inset-delimiter
       >
-        <q-list-header>Essential Links</q-list-header>
-        <q-item @click.native="openURL('http://quasar-framework.org')">
-          <q-item-side icon="school" />
-          <q-item-main label="Docs" sublabel="quasar-framework.org" />
+        <q-item to="/">
+          <q-item-side icon="home" />
+          <q-item-main label="Início" />
         </q-item>
-        <q-item @click.native="openURL('https://github.com/quasarframework/')">
-          <q-item-side icon="code" />
-          <q-item-main label="GitHub" sublabel="github.com/quasarframework" />
+        <q-item to="/timeline">
+          <q-item-side icon="timeline" />
+          <q-item-main label="Timeline" />
         </q-item>
-        <q-item @click.native="openURL('https://discord.gg/5TDhbDg')">
-          <q-item-side icon="chat" />
-          <q-item-main label="Discord Chat Channel" sublabel="https://discord.gg/5TDhbDg" />
+        <q-item to="/cart">
+          <q-item-side icon="shopping_cart" />
+          <q-item-main label="Carrinho de Compras" />
         </q-item>
-        <q-item @click.native="openURL('http://forum.quasar-framework.org')">
-          <q-item-side icon="record_voice_over" />
-          <q-item-main label="Forum" sublabel="forum.quasar-framework.org" />
+        <q-item to="/myCourses">
+          <q-item-side icon="book" />
+          <q-item-main label="Meus cursos" />
         </q-item>
-        <q-item @click.native="openURL('https://twitter.com/quasarframework')">
-          <q-item-side icon="rss feed" />
-          <q-item-main label="Twitter" sublabel="@quasarframework" />
+        <q-item to="/singUp">
+          <q-item-side icon="input" />
+          <q-item-main label="Cadastre-se" />
+        </q-item>
+        <q-item to="/singIn">
+          <q-item-side icon="settings_power" />
+          <q-item-main label="Logar" />
+        </q-item>
+        <q-item to="/logout">
+          <q-item-side icon="exit_to_app" />
+          <q-item-main label="Sair" />
         </q-item>
       </q-list>
     </q-layout-drawer>

@@ -55,8 +55,24 @@ module.exports = function (ctx) {
         'QListHeader',
         'QItem',
         'QItemMain',
+        'QItemSeparator',
         'QItemSide',
-        'QSearch'
+        'QItemTile',
+        'QSearch',
+        'QBtnDropdown',
+        'QCarousel',
+        'QCarouselSlide',
+        'QCarouselControl',
+        'QCard',
+        'QCardTitle',
+        'QCardMain',
+        'QCardMedia',
+        'QCardSeparator',
+        'QCardActions',
+        'QRating',
+        'QCollapsible',
+        'QInput',
+        'QScrollArea'
       ],
       directives: [
         'Ripple'
