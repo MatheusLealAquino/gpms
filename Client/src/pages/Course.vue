@@ -7,7 +7,7 @@
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
         <h2>{{course.title}}</h2>
         <div class="q-subheading q-mb-sm">{{course.about}}</div>
-        <q-rating slot="subtitle" v-model="courseRate" :max="5" :readonly="courseRate > 0"/> {{course.rate}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classficações' : 'classificação'}})
+        <q-rating @input="makeAvaliation" slot="subtitle" v-model="courseRate" :max="5" :readonly="courseRate > 0"/> {{course.rate}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classificações' : 'classificação'}})
         <br/> <small>{{course.visualization}} {{course.visualization > 1 || course.visualization === 0 ? 'Visualizações' : 'Visualização'}}</small>
         <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{`${course.price}`.replace('.', ',')}}</p>
         <q-btn label="Adicionar ao Carrinho" color="negative" text-color="white" class="full-width q-mb-md" />
@@ -47,10 +47,10 @@
           <q-input v-model="testimony" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
         </div>
         <div class="col-md-1">
-          <q-btn icon="send" flat @click="createTestimonies"/>
+          <q-btn icon="send" class="float-right vertical-middle" flat @click="createTestimonies"/>
         </div>
         </div>
-        <q-scroll-area style="width: 100%; height: 70%; margin-bottom:2%">
+        <q-scroll-area style="width: 100%; height: 70%; margin-bottom:2%" v-if="testimonies.length > 0">
           <q-list inset-separator>
             <q-item multiline v-for="testimonial in testimonies" v-bind:key="testimonial.id">
               <p class="q-mr-md"> Usuario {{testimonial.userId}} </p>
@@ -93,7 +93,7 @@ export default {
   data () {
     return {
       // While don't have login
-      userId: 2,
+      userId: 12,
 
       course: {},
       professor: {},
@@ -131,8 +131,12 @@ export default {
       this.testimonies = response.data
     },
     async getProfessor (id) {
-      let response = await ProfessorsService.fetch(id)
-      this.professor = response.data
+      try {
+        let response = await ProfessorsService.fetch(id)
+        this.professor = response.data
+      } catch (err) {
+        console.log('Professor não encontrado!')
+      }
     },
     updateCourse (id, course) {
       CoursesService.update(id, course)
@@ -148,21 +152,23 @@ export default {
         }
         this.testimonies.push(testimony)
         CoursesService.create(`${this.course.id}/testimonies`, testimony)
+        this.testimony = ''
       }
     },
-    async makeAvaliation () {
-      let response = await CoursesService.fetch(`${this.course.id}/${this.userId}/rate/?rate=${this.courseRate}`)
+    async makeAvaliation (courseRate) {
+      let response = await CoursesService.fetch(`${this.course.id}/${this.userId}/rate/?rate=${courseRate}`)
       this.course.rate = response.data.rate
-    }
-  },
-  watch: {
-    courseRate () {
-      this.makeAvaliation()
+      this.course.numberOfRates++
+    },
+    async getRateByUser (idCourse, idUser) {
+      let response = await CoursesService.fetch(`${idCourse}/rates`, { filter: { where: { userId: idUser } } })
+      this.courseRate = response.data.length === 1 ? response.data[0].value : 0
     }
   },
   async mounted () {
     await this.getCourse(this.$route.params.id)
     await this.getProfessor(this.course.professorId)
+    await this.getRateByUser(this.course.id, this.userId)
     this.getTestimonies(this.course.id)
     this.course.visualization++
     this.updateCourse(this.course.id, this.course)
