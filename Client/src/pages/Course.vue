@@ -7,7 +7,7 @@
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
         <h2>{{course.title}}</h2>
         <div class="q-subheading q-mb-sm">{{course.about}}</div>
-        <q-rating slot="subtitle" v-model="course.rate" :max="5" :title="course.rate" readonly/> {{course.rate}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classficações' : 'classificação'}})
+        <q-rating slot="subtitle" v-model="courseRate" :max="5" :readonly="courseRate > 0"/> {{course.rate}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classficações' : 'classificação'}})
         <br/> <small>{{course.visualization}} {{course.visualization > 1 || course.visualization === 0 ? 'Visualizações' : 'Visualização'}}</small>
         <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{`${course.price}`.replace('.', ',')}}</p>
         <q-btn label="Adicionar ao Carrinho" color="negative" text-color="white" class="full-width q-mb-md" />
@@ -92,8 +92,12 @@ export default {
   name: 'Course',
   data () {
     return {
+      // While don't have login
+      userId: 2,
+
       course: {},
       professor: {},
+      courseRate: 0,
       testimony: '',
       ementa: `<b>O que é Java?</b><br/>
               <ul>
@@ -145,6 +149,15 @@ export default {
         this.testimonies.push(testimony)
         CoursesService.create(`${this.course.id}/testimonies`, testimony)
       }
+    },
+    async makeAvaliation () {
+      let response = await CoursesService.fetch(`${this.course.id}/${this.userId}/rate/?rate=${this.courseRate}`)
+      this.course.rate = response.data.rate
+    }
+  },
+  watch: {
+    courseRate () {
+      this.makeAvaliation()
     }
   },
   async mounted () {
