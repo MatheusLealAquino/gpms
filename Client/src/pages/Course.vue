@@ -2,14 +2,14 @@
   <q-page>
     <div class="row gutter-sm header">
       <div class="col-sm-12 col-md-6 q-pt-md">
-        <img src="~assets/prog1.jpg" height="383px" class="round">
+        <img src="~assets/prog1.jpg" height="100%" class="round">
       </div>
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
-        <h2>{{title}}</h2>
-        <div class="q-subheading q-mb-sm">{{about}}</div>
-        <q-rating slot="subtitle" v-model="stars" :max="5" :title="stars" readonly/> {{stars}} ({{totalAvaliations}} {{totalAvaliations > 1 || totalAvaliations === 0 ? 'classficações' : 'classificação'}})
-        <br/> <small>{{views}} {{views > 1 || views === 0 ? 'Visualizações' : 'Visualização'}}</small>
-        <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{value}}</p>
+        <h2>{{course.title}}</h2>
+        <div class="q-subheading q-mb-sm">{{course.about}}</div>
+        <q-rating slot="subtitle" v-model="courseRate" :max="5" :readonly="courseRate > 0"/> {{course.rate}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classficações' : 'classificação'}})
+        <br/> <small>{{course.visualization}} {{course.visualization > 1 || course.visualization === 0 ? 'Visualizações' : 'Visualização'}}</small>
+        <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{`${course.price}`.replace('.', ',')}}</p>
         <q-btn label="Adicionar ao Carrinho" color="negative" text-color="white" class="full-width q-mb-md" />
         <q-btn label="Comprar" color="white" text-color="black" class="full-width q-mb-md" />
       </div>
@@ -17,7 +17,7 @@
     <div class="row gutter-sm space-inside">
       <div class="col-sm-12 col-md-6 col-12">
         <h4>Ementa</h4>
-        <p v-html="ementa"/>
+        <p v-html="course.menu"/>
       </div>
       <div class="col-sm-12 col-md-6 col-12">
         <div class="row justify-center">
@@ -28,11 +28,11 @@
                 <img src="~assets/teacher.png" height="180px" width="180px">
               </q-card-media>
               <q-card-title>
-                <div :title="nameProfessor">{{nameProfessor}}</div>
-                <q-rating slot="subtitle" v-model="starsProfessor" :max="5" :title="stars" readonly/>
+                <div :title="professor.name">{{professor.name}}</div>
+                <q-rating slot="subtitle" v-model="starsProfessor" :max="5" :title="starsProfessor" readonly/>
               </q-card-title>
               <q-card-main>
-                <p class="text-faded">{{about}}</p>
+                <p class="text-faded">{{professor.about}}</p>
               </q-card-main>
             </q-card>
           </div>
@@ -42,16 +42,22 @@
     <div class="row space-inside q-mb-md">
       <div class="col-sm-12 col-md-12">
         <h2>Depoimentos</h2>
-        <q-input v-model="comment" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
-
-        <q-scroll-area style="width: 100%; height: 100%;">
+        <div class="row">
+        <div class="col-md-11">
+          <q-input v-model="testimony" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
+        </div>
+        <div class="col-md-1">
+          <q-btn icon="send" flat @click="createTestimonies"/>
+        </div>
+        </div>
+        <q-scroll-area style="width: 100%; height: 70%; margin-bottom:2%">
           <q-list inset-separator>
-            <q-item multiline v-for="testimonial in testimonials" v-bind:key="testimonial.id">
-              <p class="q-mr-md"> {{testimonial.name}} </p>
+            <q-item multiline v-for="testimonial in testimonies" v-bind:key="testimonial.id">
+              <p class="q-mr-md"> Usuario {{testimonial.userId}} </p>
               <q-item-main
                 :label="testimonial.text"
               />
-              <q-item-side right :stamp="testimonial.date" />
+              <q-item-side right :stamp="new Date(testimonial.createdAt).toLocaleDateString('pt-br')" />
             </q-item>
           </q-list>
         </q-scroll-area>
@@ -80,17 +86,19 @@
 </style>
 
 <script>
+import { CoursesService, ProfessorsService } from '../resource'
+
 export default {
   name: 'Course',
   data () {
     return {
-      title: 'Programação de Computadores 1',
-      comment: '',
-      stars: 0,
-      views: 1,
-      about: 'Aprenda lógica de Programação do ZERO e aplique os conhecimentos em um projeto real.',
-      totalAvaliations: 0,
-      value: '00,00',
+      // While don't have login
+      userId: 2,
+
+      course: {},
+      professor: {},
+      courseRate: 0,
+      testimony: '',
       ementa: `<b>O que é Java?</b><br/>
               <ul>
                 <li>Introdução</li>
@@ -105,25 +113,59 @@ export default {
               </ul>`,
 
       // Professor
-      nameProfessor: 'Professor 1',
-      starsProfessor: 1,
-      testimonials: [
-        {
-          id: 1,
-          date: '01/05/2019',
-          text: 'How are you?',
-          name: 'Usuario 1'
-        },
-        {
-          id: 2,
-          date: '02/05/2019',
-          name: 'Usuario 2',
-          text: 'I\'m good, thank you!'
-        }
-      ]
+      starsProfessor: 5,
+      testimonies: []
     }
   },
   methods: {
+    async getCourse (id) {
+      try {
+        let response = await CoursesService.fetch(id)
+        this.course = response.data
+      } catch (err) {
+        this.$router.push('/notFound')
+      }
+    },
+    async getTestimonies (idCourse) {
+      let response = await CoursesService.fetch(`${idCourse}/testimonies`)
+      this.testimonies = response.data
+    },
+    async getProfessor (id) {
+      let response = await ProfessorsService.fetch(id)
+      this.professor = response.data
+    },
+    updateCourse (id, course) {
+      CoursesService.update(id, course)
+    },
+    createTestimonies () {
+      if (this.testimony.length > 0) {
+        let testimony = {
+          text: this.testimony,
+          createdAt: new Date(),
+          testimoniableId: this.course.id,
+          testimoniableType: 'Course',
+          userId: 2
+        }
+        this.testimonies.push(testimony)
+        CoursesService.create(`${this.course.id}/testimonies`, testimony)
+      }
+    },
+    async makeAvaliation () {
+      let response = await CoursesService.fetch(`${this.course.id}/${this.userId}/rate/?rate=${this.courseRate}`)
+      this.course.rate = response.data.rate
+    }
+  },
+  watch: {
+    courseRate () {
+      this.makeAvaliation()
+    }
+  },
+  async mounted () {
+    await this.getCourse(this.$route.params.id)
+    await this.getProfessor(this.course.professorId)
+    this.getTestimonies(this.course.id)
+    this.course.visualization++
+    this.updateCourse(this.course.id, this.course)
   }
 }
 </script>
