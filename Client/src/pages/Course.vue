@@ -156,9 +156,9 @@ export default {
       }
     },
     async makeAvaliation (courseRate) {
-      let response = await CoursesService.fetch(`${this.course.id}/${this.userId}/rate/?rate=${courseRate}`)
+      let response = await CoursesService.create(`${this.course.id}/rate/`, { userId: this.userId, rate: courseRate })
       this.course.rate = response.data.rate
-      this.course.numberOfRates++
+      this.course.numberOfRates = response.data.numberOfRates
     },
     async getRateByUser (idCourse, idUser) {
       let response = await CoursesService.fetch(`${idCourse}/rates`, { filter: { where: { userId: idUser } } })
