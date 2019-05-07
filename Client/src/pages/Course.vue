@@ -7,7 +7,7 @@
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
         <h2>{{course.title}}</h2>
         <div class="q-subheading q-mb-sm">{{course.about}}</div>
-        <q-rating @input="makeAvaliation" slot="subtitle" v-model="courseRate" :max="5" :readonly="courseRate > 0"/> {{course.rate}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classificações' : 'classificação'}})
+        <q-rating @input="makeAvaliation" slot="subtitle" v-model="courseRate" :max="5"/> {{course.rate}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classificações' : 'classificação'}})
         <br/> <small>{{course.visualization}} {{course.visualization > 1 || course.visualization === 0 ? 'Visualizações' : 'Visualização'}}</small>
         <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{`${course.price}`.replace('.', ',')}}</p>
         <q-btn label="Adicionar ao Carrinho" color="negative" text-color="white" class="full-width q-mb-md" />
