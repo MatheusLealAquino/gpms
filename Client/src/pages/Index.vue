@@ -27,7 +27,8 @@
           :id="course.id"
           :title="course.title"
           :about="course.about"
-          :price="course.price"/>
+          :price="course.price"
+          :image="course.photoUrl"/>
       </div>
     </div>
 
@@ -41,6 +42,7 @@
       </div>
       <div class="col-md-3" v-for="professor in professorsToShow" :key="professor.id">
         <DivProfessor
+          :stars="professor.rate"
           :name="professor.name"
           :educationInstitute="professor.educationInstitute"
           :lattes="professor.lattes"
@@ -60,7 +62,7 @@
       autoplay
       arrows
       color="white"
-      height="45vh"
+      height="30vh"
     >
       <q-carousel-slide
         v-for="(testimony, index) in testimonies" :key="testimony.id"
