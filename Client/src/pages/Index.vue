@@ -41,6 +41,7 @@
       </div>
       <div class="col-md-3" v-for="professor in professorsToShow" :key="professor.id">
         <DivProfessor
+          :stars="professor.rate"
           :name="professor.name"
           :educationInstitute="professor.educationInstitute"
           :lattes="professor.lattes"

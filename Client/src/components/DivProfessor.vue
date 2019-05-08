@@ -49,11 +49,11 @@ export default {
     educationInstitute: String,
     about: String,
     lattes: String,
-    id: String
+    id: Number,
+    stars: Number
   },
   data () {
     return {
-      stars: 4
     }
   }
 }
