@@ -45,7 +45,7 @@ export default {
     title: String,
     price: Number,
     about: String,
-    id: String
+    id: Number
   },
   data () {
     return {
