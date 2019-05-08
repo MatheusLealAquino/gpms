@@ -42,14 +42,14 @@
 export default {
   title: 'DivCourse',
   props: {
+    stars: Number,
     title: String,
     price: Number,
     about: String,
-    id: String
+    id: Number
   },
   data () {
     return {
-      stars: 4
     }
   }
 }
