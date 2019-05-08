@@ -49,7 +49,7 @@
 
     <div class="gutter-sm q-ml-md q-mr-md q-mt-md q-mb-md">
       <h1 class="q-display-2">Tracks</h1>
-      <DivTrack v-for="track in traks" :key="track.id" :title="track.title" :courses="track.courses"/>
+      <DivTrack v-for="track in tracksToShow" :key="track.id" :title="track.name" :courses="track.courses"/>
     </div>
 
     <q-carousel
@@ -88,7 +88,7 @@ import DivProfessorVue from '../components/DivProfessor.vue'
 import DivCourseVue from '../components/DivCourse.vue'
 import DivTrackVue from '../components/DivTrack.vue'
 import { easing } from 'quasar'
-import { CoursesService, ProfessorsService, TestimoniesService } from '../resource'
+import { CoursesService, ProfessorsService, TestimoniesService, TracksService } from '../resource'
 
 export default {
   name: 'PageIndex',
@@ -116,8 +116,10 @@ export default {
       // Testominy
       testimonies: [],
 
-      // Trak
-      traks: [],
+      // Track
+      tracks: [],
+      tracksToShow: [],
+
       overshoot: easing.overshoot,
       colors: [
         'primary',
@@ -147,8 +149,20 @@ export default {
       if (this.professorsToShow.length <= 0) this.professorNotFound = true
       else this.professorNotFound = false
     },
+    async getTracks () {
+      let response = await TracksService.fetch('', {
+        filter: {
+          include: 'courses',
+          order: 'name'
+        }
+      })
+      this.tracks = response.data
+      this.tracksToShow = this.tracks.slice(0, 6)
+    },
     async getCourses () {
-      let response = await CoursesService.fetch('')
+      let response = await CoursesService.fetch('', {
+        filter: { order: ['rate DESC'] }
+      })
       this.courses = response.data
       this.coursesToShow = this.courses.slice(0, 4)
     },
@@ -164,10 +178,7 @@ export default {
   },
   async mounted () {
     await this.getCourses()
-    this.traks = [
-      { id: '1', title: 'Carreira Front-End', courses: this.courses },
-      { id: '2', title: 'Carreira Back-End', courses: this.courses }
-    ]
+    this.getTracks()
     this.getProfessors()
     this.getTestimonies()
   }
