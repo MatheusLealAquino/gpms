@@ -6,7 +6,7 @@
           <img :src="image" width="295.83" height="166">
         </q-card-media>
         <q-card-title>
-          <div :title="title">{{title.length > 26 && $q.platform.is.desktop ? `${title.substring(0,26)}...` : title}}</div>
+          <div :title="title">{{title.length > 24 && $q.platform.is.desktop ? `${title.substring(0,22)}...` : title}}</div>
           <q-rating slot="subtitle" v-model="stars" :max="5" :title="stars" readonly/>
         </q-card-title>
         <q-card-main>
