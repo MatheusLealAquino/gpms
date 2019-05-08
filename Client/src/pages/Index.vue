@@ -23,6 +23,7 @@
       </div>
       <div class="col-md-3" v-for="course in coursesToShow" :key="course.id">
         <DivCourse
+          :stars="course.rate"
           :id="course.id"
           :title="course.title"
           :about="course.about"
