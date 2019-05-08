@@ -26,7 +26,7 @@
 
         <div v-if="$q.platform.is.desktop">
           <q-btn color="white" outline label="Fazer Login" class="q-mr-sm"/>
-          <q-btn color="negative" label="Cadastre-se" />
+          <q-btn color="negative" label="Cadastre-se" @click="openSignUp=!openSignUp" />
         </div>
 
       </q-toolbar>
@@ -75,24 +75,86 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-modal v-model="openSignUp">
+      <div class="q-pl-md q-pr-md q-pb-md">
+        <h3>Cadastre-se</h3>
+        <q-input class="q-mb-md" v-model="user.realm" float-label="Nome" placeholder="Gigi" />
+        <q-input class="q-mb-md" v-model="user.username" float-label="Usuário" placeholder="Gigi" />
+        <q-input class="q-mb-md" v-model="user.email" float-label="Email" placeholder="gigi@gmail.com" />
+        <q-input class="q-mb-md" v-model="user.password" float-label="Senha" type="password" />
+
+        <q-btn
+          color="negative"
+          @click="closeSingUp"
+          label="Cancelar"
+        />
+        <q-btn
+          color="positive"
+          class="float-right"
+          @click="signUp"
+          label="Cadastrar"
+        />
+      </div>
+    </q-modal>
+
   </q-layout>
 </template>
 
 <script>
 import { openURL } from 'quasar'
+import { UsersService } from '../resource'
+import { required, email } from 'vuelidate/lib/validators'
 
 export default {
   name: 'MyLayout',
   data () {
     return {
       leftDrawerOpen: false,
-      search: ''
+      search: '',
+      openSignUp: false,
+      user: {
+        realm: '',
+        username: '',
+        email: '',
+        password: ''
+      }
+    }
+  },
+  validations: {
+    user: {
+      email: { required, email },
+      username: { required },
+      realm: { required },
+      password: { required }
     }
   },
   methods: {
     openURL,
-    makeSearch () {
-      this.$router.push(`search?q=${this.search}`)
+    clearUser () {
+      this.user.realm = ''
+      this.user.username = ''
+      this.user.email = ''
+      this.user.password = ''
+    },
+    closeSingUp () {
+      this.openSignUp = false
+      this.clearUser()
+    },
+    async signUp () {
+      this.$v.user.$touch()
+      if (this.$v.user.$error) {
+        this.$q.notify('Por favor, preencha todos os campos.')
+        return
+      }
+
+      try {
+        await UsersService.create('', this.user)
+        this.$q.notify({ message: 'Cadastro realizado com sucesso!', color: 'positive' })
+        this.closeSingUp()
+      } catch (err) {
+        this.$q.notify('Não foi possível realizar o cadastro!')
+      }
     }
   }
 }
