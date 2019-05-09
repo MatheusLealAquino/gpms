@@ -21,20 +21,22 @@
       </div>
       <div class="col-sm-12 col-md-6 col-12">
         <div class="row justify-center">
-          <div class="col-md-6 col-12">
+          <div class="col-md-6 col-12 no_style">
             <h4>Professor</h4>
-            <q-card>
-              <q-card-media>
-                <img :src="professor.photoUrl" height="180px" width="180px">
-              </q-card-media>
-              <q-card-title>
-                <div :title="professor.name">{{professor.name}}</div>
-                <q-rating slot="subtitle" v-model="starsProfessor" :max="5" :title="starsProfessor" readonly/>
-              </q-card-title>
-              <q-card-main>
-                <p class="text-faded">{{professor.about}}</p>
-              </q-card-main>
-            </q-card>
+            <a :href="`#/teacher/${professor.id}`">
+              <q-card>
+                <q-card-media>
+                  <img :src="professor.photoUrl" height="180px" width="180px">
+                </q-card-media>
+                <q-card-title>
+                  <div :title="professor.name">{{professor.name}}</div>
+                  <q-rating slot="subtitle" v-model="professor.rate" :max="5" :title="professor.rate" readonly/>
+                </q-card-title>
+                <q-card-main>
+                  <p class="text-faded">{{professor.about}}</p>
+                </q-card-main>
+              </q-card>
+            </a>
           </div>
         </div>
       </div>
@@ -85,6 +87,19 @@
 .space-inside {
   padding-left: 25px !important;
   padding-right: 25px !important;
+}
+.no_style a {
+  color:#000000;
+}
+.no_style a:visited {
+  color:#000000;
+}
+.no_style a:hover {
+  color:#000000;
+  text-decoration: none;
+}
+.no_style a:active {
+  color:#000000;
 }
 </style>
 
