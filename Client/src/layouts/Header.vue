@@ -23,7 +23,7 @@
           <div style="height:10vh; padding:20px">Some text as content cart</div>
         </q-btn-dropdown>
 
-        <div v-if="$q.platform.is.desktop && !$login.userId">
+        <div v-if="$q.platform.is.desktop">
           <q-btn color="white" outline label="Fazer Login" class="q-mr-sm"  @click="openSignIn=!openSignIn"/>
           <q-btn color="negative" label="Cadastre-se" @click="openSignUp=!openSignUp" />
         </div>
@@ -71,7 +71,7 @@
       </q-list>
     </q-layout-drawer>
 
-    <q-page-container key="$login.userId">
+    <q-page-container>
       <router-view />
     </q-page-container>
 

@@ -1,36 +1,40 @@
 <template>
   <q-page>
     <div class="row gutter-sm header">
-      <div class="col-sm-12 col-md-6 q-pt-md">
-        <img :src="professor.photoUrl" height="100%" class="round">
+      <div class="col-sm-12 col-md-6 q-pt-md q-mt-md text-center">
+        <img :src="professor.photoUrl" height="200px" width="200px" class="round">
       </div>
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
         <h2>{{professor.name}}</h2>
         <div class="q-subheading q-mb-sm">{{professor.about}}</div>
-        <q-rating @input="makeAvaliation" slot="subtitle" v-model="professorRate" :max="5"/>
+        <q-rating @input="makeAvaliation" slot="subtitle" v-model="professorRate" :max="5" :readonly="!$login.userId"/>
         {{professor.rate}} ({{professor.numberOfRates}} {{professor.numberOfRates > 1 || professor.numberOfRates === 0 ? 'classificações' : 'classificação'}})
 
       </div>
     </div>
-    <q-carousel arrows class="text-white">
-      <q-carousel-slide class="bg-primary" v-for="curso in professor.courses" :key="curso.id">
-        <div class="row gutter-sm">
-          <div class="col-sm-12 col-md-6 q-pb-md space-inside">
-            <h5>{{curso.title}}</h5>
-            <div class="q-subheading q-mb-sm">{{curso.about}}</div>
-            <q-rating readonly slot="subtitle" v-model="curso.rate" :max="5"/>
-            {{curso.rate}} ({{curso.numberOfRates}} {{curso.numberOfRates > 1 || curso.numberOfRates === 0 ? 'classificações' : 'classificação'}})
-            <p
-              class="q-mt-sm q-mb-md"
-              style="font-size: 20px"
-            >R$ {{`${curso.price}`.replace('.', ',')}}</p>
-          </div>
-          <div class="col-sm-12 col-md-6 q-pt-md">
-            <img :src="curso.photoUrl" height="414px" width="723px" class="round">
-          </div>
-        </div>
-      </q-carousel-slide>
-    </q-carousel>
+    <div class="row">
+      <div class="col-md-12">
+        <q-carousel arrows class="text-white">
+          <q-carousel-slide class="bg-primary" v-for="curso in professor.courses" :key="curso.id">
+            <div class="row gutter-sm">
+              <div class="col-sm-12 col-md-6 q-pb-md space-inside">
+                <h5>{{curso.title}}</h5>
+                <div class="q-subheading q-mb-sm">{{curso.about}}</div>
+                <q-rating readonly slot="subtitle" v-model="curso.rate" :max="5"/>
+                {{curso.rate}} ({{curso.numberOfRates}} {{curso.numberOfRates > 1 || curso.numberOfRates === 0 ? 'classificações' : 'classificação'}})
+                <p
+                  class="q-mt-sm q-mb-md"
+                  style="font-size: 20px"
+                >R$ {{`${curso.price}`.replace('.', ',')}}</p>
+              </div>
+              <div class="col-sm-12 col-md-6 q-pt-md">
+                <img :src="curso.photoUrl" height="100%" width="100%" class="round">
+              </div>
+            </div>
+          </q-carousel-slide>
+        </q-carousel>
+      </div>
+    </div>
     <div class="row space-inside q-mb-md">
       <div class="col-sm-12 col-md-12">
         <h2>Depoimentos</h2>
@@ -63,6 +67,9 @@
             </q-item>
           </q-list>
         </q-scroll-area>
+        <div v-else class="text-center">
+          <h5>Nenhum depoimento encontrado!</h5>
+        </div>
       </div>
     </div>
   </q-page>
@@ -143,7 +150,6 @@ export default {
   font-size: 36px;
 }
 .round {
-  width: 100%;
   border-radius: 3px;
 }
 .space-inside {
