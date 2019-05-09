@@ -25,7 +25,7 @@
             <h4>Professor</h4>
             <q-card>
               <q-card-media>
-                <img src="~assets/teacher.png" height="180px" width="180px">
+                <img :src="professor.photoUrl" height="180px" width="180px">
               </q-card-media>
               <q-card-title>
                 <div :title="professor.name">{{professor.name}}</div>

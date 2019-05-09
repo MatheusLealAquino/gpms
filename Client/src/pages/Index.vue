@@ -45,6 +45,7 @@
           :id="professor.id"
           :stars="professor.rate"
           :name="professor.name"
+          :image="professor.photoUrl"
           :educationInstitute="professor.educationInstitute"
           :lattes="professor.lattes"
           :about="professor.about" />
