@@ -19,7 +19,6 @@
             </q-toolbar-title>
           </div>
         </div>
-
         <q-btn-dropdown icon="shopping_cart" flat class="q-ml-auto">
           <div style="height:10vh; padding:20px">Some text as content cart</div>
         </q-btn-dropdown>
@@ -72,7 +71,7 @@
       </q-list>
     </q-layout-drawer>
 
-    <q-page-container>
+    <q-page-container key="$login.userId">
       <router-view />
     </q-page-container>
 
@@ -101,8 +100,8 @@
     <q-modal v-model="openSignIn">
       <div class="q-pl-md q-pr-md q-pb-md">
         <h3>Login</h3>
-        <q-input class="q-mb-md" v-model="login.username" float-label="login" placeholder="digite seu login..." />
-        <q-input class="q-mb-md" v-model="login.password" float-label="password" placeholder="digite sua senha..." type="password" />
+        <q-input class="q-mb-md" v-model="login.username" float-label="Login" placeholder="Digite seu login..." />
+        <q-input class="q-mb-md" v-model="login.password" float-label="Password" placeholder="Digite sua senha..." type="password" />
 
         <q-btn
           color="negative"
