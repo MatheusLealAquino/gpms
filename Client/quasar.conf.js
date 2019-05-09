@@ -5,7 +5,9 @@ module.exports = function (ctx) {
     // app plugins (/src/plugins)
     plugins: [
       'i18n',
-      'axios'
+      'axios',
+      'vuelidate',
+      'login'
     ],
     css: [
       'app.styl'
@@ -72,7 +74,8 @@ module.exports = function (ctx) {
         'QRating',
         'QCollapsible',
         'QInput',
-        'QScrollArea'
+        'QScrollArea',
+        'QModal'
       ],
       directives: [
         'Ripple'

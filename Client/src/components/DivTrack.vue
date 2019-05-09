@@ -6,7 +6,8 @@
         <DivCourse
           :title="course.title"
           :about="course.about"
-          :price="course.price"/>
+          :price="course.price"
+          :image="course.photoUrl"/>
         </div>
       </div>
     </q-collapsible>

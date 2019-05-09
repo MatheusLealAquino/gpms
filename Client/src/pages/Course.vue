@@ -7,7 +7,7 @@
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
         <h2>{{course.title}}</h2>
         <div class="q-subheading q-mb-sm">{{course.about}}</div>
-        <q-rating @input="makeAvaliation" slot="subtitle" v-model="courseRate" :max="5" readonly="!$login.userId"/> {{course.rate ? course.rate.toFixed(2) : ''}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classificações' : 'classificação'}})
+        <q-rating @input="makeAvaliation" slot="subtitle" v-model="courseRate" :max="5" :readonly="!$login.userId"/> {{course.rate ? course.rate.toFixed(2) : ''}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classificações' : 'classificação'}})
         <br/> <small>{{course.visualization}} {{course.visualization > 1 || course.visualization === 0 ? 'Visualizações' : 'Visualização'}}</small>
         <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{`${course.price ? course.price.toFixed(2) : ''}`.replace('.', ',')}}</p>
         <q-btn label="Adicionar ao Carrinho" color="negative" text-color="white" class="full-width q-mb-md" />
@@ -25,7 +25,7 @@
             <h4>Professor</h4>
             <q-card>
               <q-card-media>
-                <img src="~assets/teacher.png" height="180px" width="180px">
+                <img :src="professor.photoUrl" height="180px" width="180px">
               </q-card-media>
               <q-card-title>
                 <div :title="professor.name">{{professor.name}}</div>
@@ -95,9 +95,7 @@ export default {
   name: 'Course',
   data () {
     return {
-      // While don't have login
-      userId: 12,
-
+      userId: this.$login.userId,
       course: {},
       professor: {},
       courseRate: 0,
@@ -151,7 +149,7 @@ export default {
           createdAt: new Date(),
           testimoniableId: this.course.id,
           testimoniableType: 'Course',
-          userId: 2
+          userId: this.$login.userId
         }
         this.testimonies.push(testimony)
         CoursesService.create(`${this.course.id}/testimonies`, testimony)

@@ -23,9 +23,12 @@
       </div>
       <div class="col-md-3" v-for="course in coursesToShow" :key="course.id">
         <DivCourse
+          :stars="course.rate"
+          :id="course.id"
           :title="course.title"
           :about="course.about"
-          :price="course.price"/>
+          :price="course.price"
+          :image="course.photoUrl"/>
       </div>
     </div>
 
@@ -39,7 +42,10 @@
       </div>
       <div class="col-md-3" v-for="professor in professorsToShow" :key="professor.id">
         <DivProfessor
+          :id="professor.id"
+          :stars="professor.rate"
           :name="professor.name"
+          :image="professor.photoUrl"
           :educationInstitute="professor.educationInstitute"
           :lattes="professor.lattes"
           :about="professor.about" />
@@ -48,7 +54,7 @@
 
     <div class="gutter-sm q-ml-md q-mr-md q-mt-md q-mb-md">
       <h1 class="q-display-2">Tracks</h1>
-      <DivTrack v-for="track in traks" :key="track.id" :title="track.title" :courses="track.courses"/>
+      <DivTrack v-for="track in tracksToShow" :key="track.id" :title="track.name" :courses="track.courses"/>
     </div>
 
     <q-carousel
@@ -58,21 +64,18 @@
       autoplay
       arrows
       color="white"
-      height="45vh"
+      height="30vh"
     >
       <q-carousel-slide
-        v-for="n in 7" :key="`anim-${n}`"
-        class="flex flex-center"
-        :class="`bg-${colors[n % 5]}`"
+        v-for="(testimony, index) in testimonies" :key="testimony.id"
+        class="flex flex-center justify-center"
+        :class="`bg-${colors[index % 5]}`"
       >
-        <div class="row justify-center">
-          <div class="col-md-3">
-            <img src="~assets/prog1.jpg" height="125" width="125" class="rounded-img">
-          </div>
-          <div class="col-md-7 q-pt-xl">
-            Acredito no aprendizado de longo prazo, e a Acedemy UFF é uma ótima plataforma para aprender com especialistas.
-            Aprendi muito e recomendo a todos os meus amigos.
-          </div>
+        <div class="col-md-3 q-mb-sm">
+          <img src="~assets/profile-avatar.png" height="125" width="125" class="rounded-img">
+        </div>
+        <div class="col-md-7 q-pl-xl">
+          {{testimony.text}}
         </div>
       </q-carousel-slide>
     </q-carousel>
@@ -90,7 +93,7 @@ import DivProfessorVue from '../components/DivProfessor.vue'
 import DivCourseVue from '../components/DivCourse.vue'
 import DivTrackVue from '../components/DivTrack.vue'
 import { easing } from 'quasar'
-import { CoursesService, ProfessorsService } from '../resource'
+import { CoursesService, ProfessorsService, TestimoniesService, TracksService } from '../resource'
 
 export default {
   name: 'PageIndex',
@@ -102,15 +105,26 @@ export default {
   data () {
     return {
       stars: 4,
+
+      // Course
       searchCourse: '',
       coursesNotFound: false,
       coursesToShow: [],
       courses: [],
+
+      // Professor
       searchProfessor: '',
       professorNotFound: false,
       professorsToShow: [],
       professors: [],
-      traks: [],
+
+      // Testominy
+      testimonies: [],
+
+      // Track
+      tracks: [],
+      tracksToShow: [],
+
       overshoot: easing.overshoot,
       colors: [
         'primary',
@@ -140,8 +154,20 @@ export default {
       if (this.professorsToShow.length <= 0) this.professorNotFound = true
       else this.professorNotFound = false
     },
+    async getTracks () {
+      let response = await TracksService.fetch('', {
+        filter: {
+          include: 'courses',
+          order: 'name'
+        }
+      })
+      this.tracks = response.data
+      this.tracksToShow = this.tracks.slice(0, 6)
+    },
     async getCourses () {
-      let response = await CoursesService.fetch('')
+      let response = await CoursesService.fetch('', {
+        filter: { order: ['rate DESC'] }
+      })
       this.courses = response.data
       this.coursesToShow = this.courses.slice(0, 4)
     },
@@ -149,15 +175,17 @@ export default {
       let response = await ProfessorsService.fetch('')
       this.professors = response.data
       this.professorsToShow = this.professors.slice(0, 4)
+    },
+    async getTestimonies () {
+      let response = await TestimoniesService.fetch('', { filter: { limit: 4 } })
+      this.testimonies = response.data
     }
   },
   async mounted () {
     await this.getCourses()
-    this.traks = [
-      { id: '1', title: 'Carreira Front-End', courses: this.courses },
-      { id: '2', title: 'Carreira Back-End', courses: this.courses }
-    ]
+    this.getTracks()
     this.getProfessors()
+    this.getTestimonies()
   }
 }
 </script>

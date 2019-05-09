@@ -19,14 +19,13 @@
             </q-toolbar-title>
           </div>
         </div>
-
         <q-btn-dropdown icon="shopping_cart" flat class="q-ml-auto">
           <div style="height:10vh; padding:20px">Some text as content cart</div>
         </q-btn-dropdown>
 
         <div v-if="$q.platform.is.desktop">
-          <q-btn color="white" outline label="Fazer Login" class="q-mr-sm"/>
-          <q-btn color="negative" label="Cadastre-se" />
+          <q-btn color="white" outline label="Fazer Login" class="q-mr-sm"  @click="openSignIn=!openSignIn"/>
+          <q-btn color="negative" label="Cadastre-se" @click="openSignUp=!openSignUp" />
         </div>
 
       </q-toolbar>
@@ -41,26 +40,33 @@
         link
         inset-delimiter
       >
-        <q-list-header>Essential Links</q-list-header>
-        <q-item @click.native="openURL('http://quasar-framework.org')">
-          <q-item-side icon="school" />
-          <q-item-main label="Docs" sublabel="quasar-framework.org" />
+        <q-item to="/">
+          <q-item-side icon="home" />
+          <q-item-main label="Início" />
         </q-item>
-        <q-item @click.native="openURL('https://github.com/quasarframework/')">
-          <q-item-side icon="code" />
-          <q-item-main label="GitHub" sublabel="github.com/quasarframework" />
+        <q-item to="/timeline">
+          <q-item-side icon="timeline" />
+          <q-item-main label="Timeline" />
         </q-item>
-        <q-item @click.native="openURL('https://discord.gg/5TDhbDg')">
-          <q-item-side icon="chat" />
-          <q-item-main label="Discord Chat Channel" sublabel="https://discord.gg/5TDhbDg" />
+        <q-item to="/cart">
+          <q-item-side icon="shopping_cart" />
+          <q-item-main label="Carrinho de Compras" />
         </q-item>
-        <q-item @click.native="openURL('http://forum.quasar-framework.org')">
-          <q-item-side icon="record_voice_over" />
-          <q-item-main label="Forum" sublabel="forum.quasar-framework.org" />
+        <q-item to="/myCourses">
+          <q-item-side icon="book" />
+          <q-item-main label="Meus cursos" />
         </q-item>
-        <q-item @click.native="openURL('https://twitter.com/quasarframework')">
-          <q-item-side icon="rss feed" />
-          <q-item-main label="Twitter" sublabel="@quasarframework" />
+        <q-item to="/singUp">
+          <q-item-side icon="input" />
+          <q-item-main label="Cadastre-se" />
+        </q-item>
+        <q-item to="/singIn">
+          <q-item-side icon="settings_power" />
+          <q-item-main label="Logar" />
+        </q-item>
+        <q-item to="/logout">
+          <q-item-side icon="exit_to_app" />
+          <q-item-main label="Sair" />
         </q-item>
       </q-list>
     </q-layout-drawer>
@@ -68,24 +74,136 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-modal v-model="openSignUp">
+      <div class="q-pl-md q-pr-md q-pb-md">
+        <h3>Cadastre-se</h3>
+        <q-input class="q-mb-md" v-model="user.realm" float-label="Nome" placeholder="Gigi" />
+        <q-input class="q-mb-md" v-model="user.username" float-label="Usuário" placeholder="Gigi" />
+        <q-input class="q-mb-md" v-model="user.email" float-label="Email" placeholder="gigi@gmail.com" />
+        <q-input class="q-mb-md" v-model="user.password" float-label="Senha" type="password" />
+
+        <q-btn
+          color="negative"
+          @click="closeSingUp"
+          label="Cancelar"
+        />
+        <q-btn
+          color="positive"
+          class="float-right"
+          @click="signUp"
+          label="Cadastrar"
+        />
+      </div>
+    </q-modal>
+
+    <q-modal v-model="openSignIn">
+      <div class="q-pl-md q-pr-md q-pb-md">
+        <h3>Login</h3>
+        <q-input class="q-mb-md" v-model="login.username" float-label="Login" placeholder="Digite seu login..." />
+        <q-input class="q-mb-md" v-model="login.password" float-label="Password" placeholder="Digite sua senha..." type="password" />
+
+        <q-btn
+          color="negative"
+          @click="closeSingIn"
+          label="Cancelar"
+        />
+        <q-btn
+          color="positive"
+          class="float-right"
+          @click="signIn"
+          label="Logar"
+        />
+      </div>
+    </q-modal>
+
   </q-layout>
 </template>
 
 <script>
 import { openURL } from 'quasar'
+import { UsersService } from '../resource'
+import { required, email } from 'vuelidate/lib/validators'
 
 export default {
   name: 'MyLayout',
   data () {
     return {
       leftDrawerOpen: false,
-      search: ''
+      search: '',
+      openSignUp: false,
+      openSignIn: false,
+      login: {
+        username: '',
+        password: ''
+      },
+      user: {
+        realm: '',
+        username: '',
+        email: '',
+        password: ''
+      }
+    }
+  },
+  validations: {
+    user: {
+      email: { required, email },
+      username: { required },
+      realm: { required },
+      password: { required }
+    },
+    login: {
+      username: { required },
+      password: { required }
     }
   },
   methods: {
     openURL,
-    makeSearch () {
-      this.$router.push(`search?q=${this.search}`)
+    clearUser () {
+      this.user.realm = ''
+      this.user.username = ''
+      this.user.email = ''
+      this.user.password = ''
+    },
+    closeSingUp () {
+      this.openSignUp = false
+      this.clearUser()
+    },
+    closeSingIn () {
+      this.openSignIn = false
+      this.clearUser()
+    },
+    async signIn () {
+      this.$v.login.$touch()
+      if (this.$v.login.$error) {
+        this.$q.notify('Por favor, preencha todos os campos.')
+        return
+      }
+      try {
+        const res = await UsersService.create('login', this.login)
+        this.$login.userId = res.data.userId
+        this.$q.notify({ message: 'Login feito com sucesso!', color: 'positive' })
+        this.closeSingIn()
+      } catch (error) {
+        console.log('status', error)
+        this.$q.notify('Não foi possível realizar o login!')
+      }
+    },
+    async signUp () {
+      this.$v.user.$touch()
+      if (this.$v.user.$error) {
+        this.$q.notify('Por favor, preencha todos os campos.')
+        return
+      }
+
+      try {
+        const res = await UsersService.create('', this.user)
+        this.$login.userId = res.data.userId
+        this.$q.notify({ message: 'Cadastro realizado com sucesso!', color: 'positive' })
+        this.closeSingUp()
+      } catch (err) {
+        this.$q.notify('Não foi possível realizar o cadastro!')
+      }
     }
   }
 }
