@@ -2,7 +2,7 @@
   <q-page>
     <div class="row gutter-sm header">
       <div class="col-sm-12 col-md-6 q-pt-md">
-        <img src="~assets/prog1.jpg" height="100%" class="round">
+        <img :src="course.photoUrl" height="100%" class="round">
       </div>
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
         <h2>{{course.title}}</h2>
