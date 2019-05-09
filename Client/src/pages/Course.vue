@@ -42,7 +42,7 @@
     <div class="row space-inside q-mb-md">
       <div class="col-sm-12 col-md-12">
         <h2>Depoimentos</h2>
-        <div class="row">
+        <div class="row" v-if="this.$login.userId">
         <div class="col-md-11">
           <q-input v-model="testimony" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
         </div>
@@ -92,9 +92,7 @@ export default {
   name: 'Course',
   data () {
     return {
-      // While don't have login
-      userId: 12,
-
+      userId: this.$login.userId,
       course: {},
       professor: {},
       courseRate: 0,
@@ -148,7 +146,7 @@ export default {
           createdAt: new Date(),
           testimoniableId: this.course.id,
           testimoniableType: 'Course',
-          userId: 2
+          userId: this.$login.userId
         }
         this.testimonies.push(testimony)
         CoursesService.create(`${this.course.id}/testimonies`, testimony)
