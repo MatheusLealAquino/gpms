@@ -95,9 +95,7 @@ export default {
   name: 'Course',
   data () {
     return {
-      // While don't have login
-      userId: 12,
-
+      userId: this.$login.userId,
       course: {},
       professor: {},
       courseRate: 0,
@@ -151,7 +149,7 @@ export default {
           createdAt: new Date(),
           testimoniableId: this.course.id,
           testimoniableType: 'Course',
-          userId: 2
+          userId: this.$login.userId
         }
         this.testimonies.push(testimony)
         CoursesService.create(`${this.course.id}/testimonies`, testimony)
