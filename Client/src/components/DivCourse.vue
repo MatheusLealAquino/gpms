@@ -11,7 +11,7 @@
         </q-card-title>
         <q-card-main>
           <p class="text-faded" :title="about">{{about.length > 34 && $q.platform.is.desktop ? `${about.substring(0,35)}...` : about}}</p>
-          <p style="font-size: 20px"><b>Valor:</b> R$ {{`${price}`.replace('.', ',')}}</p>
+          <p style="font-size: 20px"><b>Valor:</b> R$ {{`${price.toFixed(2)}`.replace('.', ',')}}</p>
         </q-card-main>
         <q-card-separator />
         <q-card-actions class="justify-center">
