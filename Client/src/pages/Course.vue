@@ -7,7 +7,7 @@
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
         <h2>{{course.title}}</h2>
         <div class="q-subheading q-mb-sm">{{course.about}}</div>
-        <q-rating @input="makeAvaliation" slot="subtitle" v-model="courseRate" :max="5"/> {{course.rate ? course.rate.toFixed(2) : ''}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classificações' : 'classificação'}})
+        <q-rating @input="makeAvaliation" slot="subtitle" v-model="courseRate" :max="5" readonly="!$login.userId"/> {{course.rate ? course.rate.toFixed(2) : ''}} ({{course.numberOfRates}} {{course.numberOfRates > 1 || course.numberOfRates === 0 ? 'classificações' : 'classificação'}})
         <br/> <small>{{course.visualization}} {{course.visualization > 1 || course.visualization === 0 ? 'Visualizações' : 'Visualização'}}</small>
         <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{`${course.price ? course.price.toFixed(2) : ''}`.replace('.', ',')}}</p>
         <q-btn label="Adicionar ao Carrinho" color="negative" text-color="white" class="full-width q-mb-md" />
@@ -42,13 +42,13 @@
     <div class="row space-inside q-mb-md">
       <div class="col-sm-12 col-md-12">
         <h2>Depoimentos</h2>
-        <div class="row">
-        <div class="col-md-11">
-          <q-input v-model="testimony" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
-        </div>
-        <div class="col-md-1">
-          <q-btn icon="send" class="float-right vertical-middle" flat @click="createTestimonies"/>
-        </div>
+        <div class="row" v-if="$login.userId">
+          <div class="col-md-11">
+            <q-input v-model="testimony" class="q-mb-md" type="textarea" float-label="Depoimento" placeholder="Digite seu depoimento" />
+          </div>
+          <div class="col-md-1">
+            <q-btn icon="send" class="float-right vertical-middle" flat @click="createTestimonies"/>
+          </div>
         </div>
         <q-scroll-area style="width: 100%; height: 70%; margin-bottom:2%" v-if="testimonies.length > 0">
           <q-list inset-separator>
@@ -61,6 +61,9 @@
             </q-item>
           </q-list>
         </q-scroll-area>
+        <div v-else class="text-center">
+          <h5>Nenhum depoimento encontrado!</h5>
+        </div>
       </div>
     </div>
   </q-page>
