@@ -3,7 +3,7 @@
     <a :href="`#/teacher/${id}`">
       <q-card inline style="height:100%">
         <q-card-media>
-          <img src="~assets/teacher.png" height="200">
+          <img :src="image" height="200">
         </q-card-media>
         <q-card-title>
           <div :title="name">{{name.length > 26 && $q.platform.is.desktop ? `${name.substring(0,26)}...` : name}}</div>
@@ -54,6 +54,7 @@ export default {
     about: String,
     lattes: String,
     id: Number,
+    image: String,
     stars: Number
   },
   data () {
