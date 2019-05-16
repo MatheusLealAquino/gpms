@@ -7,7 +7,9 @@
           :title="course.title"
           :about="course.about"
           :price="course.price"
-          :image="course.photoUrl"/>
+          :image="course.photoUrl"
+          :stars="course.rate"
+          :id="course.id"/>
         </div>
       </div>
     </q-collapsible>
