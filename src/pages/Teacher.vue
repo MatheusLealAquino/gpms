@@ -1,8 +1,8 @@
 <template>
   <q-page>
-    <div class="row gutter-sm header">
-      <div class="col-sm-12 col-md-6 q-pt-md q-mt-md text-center">
-        <img :src="professor.photoUrl" height="200px" width="200px" class="round">
+    <div class="row gutter-sm header justify-center">
+      <div class="col-sm-12 col-md-2 q-pt-md q-mt-md">
+        <img :src="professor.photoUrl" class="avatar" id="professor-image">
       </div>
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
         <h2>{{professor.name}}</h2>
@@ -148,6 +148,12 @@ export default {
 </script>
 
 <style>
+#professor-image {
+  display: block;
+  max-width:230px;
+  width: auto;
+  height: auto;
+}
 .header {
   background-color: #505763;
   color: #ffffff;
