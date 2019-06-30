@@ -110,27 +110,22 @@ export default {
   name: 'Course',
   data () {
     return {
-      userId: this.$login.userId,
       course: {},
       professor: {},
       courseRate: 0,
       testimony: '',
-      ementa: `<b>O que é Java?</b><br/>
-              <ul>
-                <li>Introdução</li>
-                <li>A plataforma Java</li>
-                <li>Benefício da JVM</li>
-                <li>Quais características?</li>
-                <li>Quais sistemas?</li>
-                <li>Bytecode vs EXE?</li>
-                <li>Sobre o Bytecode</li>
-                <li>Para saber mais: o nome Bytecode</li>
-                <li>O que aprendemos?</li>
-              </ul>`,
+      ementa: ``,
 
       // Professor
       starsProfessor: 5,
       testimonies: []
+    }
+  },
+  computed: {
+    user: {
+      get () {
+        return this.$store.state.user
+      }
     }
   },
   methods: {
@@ -164,7 +159,7 @@ export default {
           createdAt: new Date(),
           testimoniableId: this.course.id,
           testimoniableType: 'Course',
-          userId: this.$login.userId
+          userId: this.user.id
         }
         this.testimonies.push(testimony)
         CoursesService.create(`${this.course.id}/testimonies`, testimony)
@@ -172,7 +167,7 @@ export default {
       }
     },
     async makeAvaliation (courseRate) {
-      let response = await CoursesService.create(`${this.course.id}/rate/`, { userId: this.userId, rate: courseRate })
+      let response = await CoursesService.create(`${this.course.id}/rate/`, { userId: this.user.id, rate: courseRate })
       this.course.rate = response.data.rate
       this.course.numberOfRates = response.data.numberOfRates
     },
@@ -184,7 +179,7 @@ export default {
   async mounted () {
     await this.getCourse(this.$route.params.id)
     await this.getProfessor(this.course.professorId)
-    await this.getRateByUser(this.course.id, this.userId)
+    await this.getRateByUser(this.course.id, this.user.id)
     this.getTestimonies(this.course.id)
     this.course.visualization++
     this.updateCourse(this.course.id, this.course)
