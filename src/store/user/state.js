@@ -2,5 +2,6 @@ export default {
   id: null,
   email: null,
   name: null,
-  token: null
+  token: null,
+  favorites: []
 }
