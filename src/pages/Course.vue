@@ -3,7 +3,8 @@
     <div class="row gutter-sm header">
       <div class="col-sm-12 col-md-6 q-pt-md relative-position">
         <div id="course-image-icon" class="row justify-center">
-          <q-icon size="100px" name="favorite" flat color="white" class="q-mb-md"/>
+          <q-icon size="100px" name="favorite" flat
+          :color="this.favorites.map(el => el.id).includes(this.course.id) ? 'red' : 'white'" class="q-mb-md"/>
         </div>
         <img id="course-image" :src="course.photoUrl" height="100%" @click="fav()">
       </div>
@@ -140,6 +141,11 @@ export default {
     user: {
       get () {
         return this.$store.state.user
+      }
+    },
+    favorites: {
+      get () {
+        return this.$store.state.user.favorites
       }
     }
   },
