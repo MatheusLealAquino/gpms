@@ -35,7 +35,7 @@
     <div class="row gutter-sm q-pl-md q-pr-md q-mb-sm">
       <div class="col-md-12"><h1 class="q-display-2">Docentes</h1></div>
       <div class="col-md-12">
-        <q-search color="white" inverted-light v-model="searchProfessor" placeholder="Buscar docentes" @input="filterProfessor"/>
+        <q-search readonly onfocus="this.removeAttribute('readonly')" color="white" inverted-light v-model="searchProfessor" placeholder="Buscar docentes" @input="filterProfessor"/>
       </div>
       <div class="col-md-12" v-if="professorNotFound">
         <p class="text-center text-fade">Nenhum docente encontrado!</p>

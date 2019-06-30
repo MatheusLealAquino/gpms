@@ -114,7 +114,7 @@
 
 <script>
 import { openURL } from 'quasar'
-import { CustomUsersService } from '../resource'
+import { UsersService } from '../resource'
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {
@@ -207,7 +207,7 @@ export default {
       }
 
       try {
-        await CustomUsersService.create('', this.user)
+        await UsersService.create('', this.user)
         this.$q.notify({ message: 'Cadastro realizado com sucesso!', color: 'positive' })
         this.closeSingUp()
       } catch (err) {

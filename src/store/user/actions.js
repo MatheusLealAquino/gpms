@@ -1,8 +1,8 @@
-import { CustomUsersService } from '../../resource'
+import { UsersService } from '../../resource'
 
 export async function login (context, data) {
   try {
-    let response = await CustomUsersService.create('login', {
+    let response = await UsersService.create('login', {
       email: data.email,
       password: data.password
     })
@@ -17,7 +17,7 @@ export async function login (context, data) {
 
 export async function logout (context, data) {
   try {
-    await CustomUsersService.create(`logout?access_token=${context.state.token}`)
+    await UsersService.create(`logout?access_token=${context.state.token}`)
     context.commit('logout')
     return true
   } catch (err) {
