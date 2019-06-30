@@ -42,7 +42,7 @@
             :key="item.id">
             <div class="row justify-between items-center">
               <q-icon name="library_books" size="50px" color="primary"/>
-              <!-- {{ item.title.toLowerCase().substring(0, 30) }} -->
+              {{ item.title.toLowerCase().substring(0, 30) }}
               <q-btn icon="cancel" flat size="25px" color="red" @click="removeItem(item)"/>
             </div>
           </div>
