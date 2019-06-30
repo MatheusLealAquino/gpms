@@ -19,8 +19,13 @@
             </q-toolbar-title>
           </div>
         </div>
-        <q-btn-dropdown icon="shopping_cart" flat class="q-ml-auto">
-          <div style="height:10vh; padding:20px">Some text as content cart</div>
+        <q-btn-dropdown :disabled="this.cartItems" icon="shopping_cart" flat class="q-ml-auto">
+          <div
+            style="height:10vh; padding:20px"
+            v-for="item in this.cartItems"
+            :key="item.id">
+            {{ item }}
+          </div>
         </q-btn-dropdown>
         <div v-if="userLogged && userState.name">
           Olá, {{userState.name}}
@@ -146,6 +151,11 @@ export default {
     userState: {
       get () {
         return this.$store.state.user
+      }
+    },
+    cartItems: {
+      get () {
+        return this.$store.state.cart.items
       }
     }
   },

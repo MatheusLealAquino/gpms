@@ -3,13 +3,15 @@ import Vuex from 'vuex'
 
 // we first import the module
 import user from './user'
+import cart from './cart'
 
 Vue.use(Vuex)
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      user
+      user,
+      cart
     },
 
     strict: false
