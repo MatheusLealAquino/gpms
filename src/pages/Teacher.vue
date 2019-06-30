@@ -90,6 +90,13 @@ export default {
       testimonies: []
     }
   },
+  computed: {
+    user: {
+      get () {
+        return this.$store.state.user
+      }
+    }
+  },
   methods: {
     async getProfessor (id) {
       try {
@@ -114,7 +121,7 @@ export default {
           createdAt: new Date(),
           testimoniableId: this.professor.id,
           testimoniableType: 'Professor',
-          userId: 2
+          userId: this.user.id
         }
         this.testimonies.push(testimony)
         ProfessorsService.create(`${this.professor.id}/testimonies`, testimony)
@@ -122,7 +129,7 @@ export default {
       }
     },
     async makeAvaliation (professorRate) {
-      let response = await ProfessorsService.create(`${this.professor.id}/rate/`, { userId: this.userId, rate: professorRate })
+      let response = await ProfessorsService.create(`${this.professor.id}/rate/`, { userId: this.user.id, rate: professorRate })
       this.professor.rate = response.data.rate
       this.professor.numberOfRates = response.data.numberOfRates
     },
@@ -133,7 +140,7 @@ export default {
   },
   async mounted () {
     await this.getProfessor(this.$route.params.id)
-    await this.getRateByUser(this.professor.id, this.userId)
+    await this.getRateByUser(this.professor.id, this.user.id)
     this.getTestimonies(this.professor.id)
     this.professor.visualization++
   }

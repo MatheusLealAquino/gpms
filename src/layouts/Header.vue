@@ -22,8 +22,10 @@
         <q-btn-dropdown icon="shopping_cart" flat class="q-ml-auto">
           <div style="height:10vh; padding:20px">Some text as content cart</div>
         </q-btn-dropdown>
-
-        <div v-if="$q.platform.is.desktop || !$login.userId">
+        <div v-if="userLogged && userState.name">
+          Olá, {{userState.name}}
+        </div>
+        <div v-if="$q.platform.is.desktop && !userLogged">
           <q-btn color="white" outline label="Fazer Login" class="q-mr-sm"  @click="openSignIn=!openSignIn"/>
           <q-btn color="negative" label="Cadastre-se" @click="openSignUp=!openSignUp" />
         </div>
@@ -40,33 +42,23 @@
         link
         inset-delimiter
       >
-        <q-item to="/">
-          <q-item-side icon="home" />
-          <q-item-main label="Início" />
+        <q-item>
+          <q-btn color="black" icon="home" flat label="Início" class="q-mr-sm" to="/"/>
         </q-item>
-        <q-item to="/timeline">
-          <q-item-side icon="timeline" />
-          <q-item-main label="Timeline" />
+        <q-item>
+          <q-btn color="black" icon="timeline" flat label="Timeline" class="q-mr-sm" to="/timeline"/>
         </q-item>
-        <q-item to="/cart">
-          <q-item-side icon="shopping_cart" />
-          <q-item-main label="Carrinho de Compras" />
+        <q-item v-if="userLogged">
+          <q-btn color="black" icon="book" flat label="Meus cursos" class="q-mr-sm" to="/myCourses"/>
         </q-item>
-        <q-item to="/myCourses">
-          <q-item-side icon="book" />
-          <q-item-main label="Meus cursos" />
+        <q-item v-if="!userLogged">
+          <q-btn color="black" icon="input" flat label="Cadastre-se" class="q-mr-sm" @click="openSignUp=!openSignUp"/>
         </q-item>
-        <q-item to="/singUp">
-          <q-item-side icon="input" />
-          <q-item-main label="Cadastre-se" />
+        <q-item v-if="!userLogged">
+          <q-btn color="black" icon="settings_power" flat label="Logar" class="q-mr-sm" @click="openSignIn=!openSignIn"/>
         </q-item>
-        <q-item to="/singIn">
-          <q-item-side icon="settings_power" />
-          <q-item-main label="Logar" />
-        </q-item>
-        <q-item to="/logout">
-          <q-item-side icon="exit_to_app" />
-          <q-item-main label="Sair" />
+        <q-item v-if="userLogged">
+          <q-btn color="black" icon="exit_to_app" flat label="Sair" class="q-mr-sm" @click="makeLogout"/>
         </q-item>
       </q-list>
     </q-layout-drawer>
@@ -100,7 +92,7 @@
     <q-modal v-model="openSignIn">
       <div class="q-pl-md q-pr-md q-pb-md">
         <h3>Login</h3>
-        <q-input class="q-mb-md" v-model="login.username" float-label="Login" placeholder="Digite seu login..." />
+        <q-input class="q-mb-md" v-model="login.email" float-label="Login" placeholder="Digite seu login(e-mail)..." />
         <q-input class="q-mb-md" v-model="login.password" float-label="Password" placeholder="Digite sua senha..." type="password" />
 
         <q-btn
@@ -122,7 +114,7 @@
 
 <script>
 import { openURL } from 'quasar'
-import { UsersService } from '../resource'
+import { CustomUsersService } from '../resource'
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {
@@ -134,7 +126,7 @@ export default {
       openSignUp: false,
       openSignIn: false,
       login: {
-        username: '',
+        email: '',
         password: ''
       },
       user: {
@@ -142,6 +134,18 @@ export default {
         username: '',
         email: '',
         password: ''
+      }
+    }
+  },
+  computed: {
+    userLogged: {
+      get () {
+        return this.$store.getters['user/isLogged']
+      }
+    },
+    userState: {
+      get () {
+        return this.$store.state.user
       }
     }
   },
@@ -153,7 +157,7 @@ export default {
       password: { required }
     },
     login: {
-      username: { required },
+      email: { required },
       password: { required }
     }
   },
@@ -180,12 +184,18 @@ export default {
         return
       }
       try {
-        const res = await UsersService.create('login', this.login)
-        this.$login.userId = res.data.userId
-        this.$q.notify({ message: 'Login feito com sucesso!', color: 'positive' })
+        // make login the user
+        let response = await this.$store.dispatch('user/login', {
+          email: this.login.email,
+          password: this.login.password
+        })
+        if (response) {
+          this.$q.notify({ message: 'Login feito com sucesso!', color: 'positive' })
+        } else {
+          this.$q.notify('Não foi possível realizar o login!')
+        }
         this.closeSingIn()
       } catch (error) {
-        console.log('status', error)
         this.$q.notify('Não foi possível realizar o login!')
       }
     },
@@ -197,13 +207,17 @@ export default {
       }
 
       try {
-        const res = await UsersService.create('', this.user)
-        this.$login.userId = res.data.userId
+        await CustomUsersService.create('', this.user)
         this.$q.notify({ message: 'Cadastro realizado com sucesso!', color: 'positive' })
         this.closeSingUp()
       } catch (err) {
         this.$q.notify('Não foi possível realizar o cadastro!')
       }
+    },
+    makeLogout () {
+      this.$store.dispatch('user/logout')
+      this.$q.notify({ message: 'Logout realizado com sucesso!', color: 'positive' })
+      this.finishRequest = true
     }
   }
 }
