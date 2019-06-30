@@ -19,8 +19,18 @@
             </q-toolbar-title>
           </div>
         </div>
-        <q-btn-dropdown icon="shopping_cart" flat class="q-ml-auto">
-          <div style="height:10vh; padding:20px">Some text as content cart</div>
+        <q-btn-dropdown :disabled="this.cartItems.length === 0"
+          icon="shopping_cart" flat class="q-ml-auto">
+          <div
+            style="height:10vh; padding:20px"
+            v-for="item in this.cartItems"
+            :key="item.id">
+            <div class="row justify-between items-center">
+              <q-icon name="library_books" size="50px" color="primary"/>
+              {{ item.title.toLowerCase().substring(0, 30) }}
+              <q-btn icon="cancel" flat size="25px" color="red" @click="removeItem(item)"/>
+            </div>
+          </div>
         </q-btn-dropdown>
         <div v-if="userLogged && userState.name">
           Olá, {{userState.name}}
@@ -147,6 +157,11 @@ export default {
       get () {
         return this.$store.state.user
       }
+    },
+    cartItems: {
+      get () {
+        return this.$store.state.cart.items
+      }
     }
   },
   validations: {
@@ -163,6 +178,9 @@ export default {
   },
   methods: {
     openURL,
+    removeItem (item) {
+      this.$store.dispatch('cart/removeItem', item)
+    },
     clearUser () {
       this.user.realm = ''
       this.user.username = ''
