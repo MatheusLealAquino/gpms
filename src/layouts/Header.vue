@@ -19,15 +19,30 @@
             </q-toolbar-title>
           </div>
         </div>
+        <q-btn-dropdown :disabled="this.favorites.length === 0"
+          icon="favorite" flat class="q-ml-auto">
+          <center class="q-pt-md">Lista de Desejos</center>
+          <ul
+            style="height:10vh; padding:20px"
+            v-for="item in this.favorites"
+            :key="item.id">
+            <li class="row justify-between items-center">
+              <q-icon name="favorite" size="50px" color="primary"/>
+              {{ item.title.toLowerCase().substring(0, 30) }}
+              <q-btn icon="cancel" flat size="25px" color="red" @click="unfav(item.id)"/>
+            </li>
+          </ul>
+        </q-btn-dropdown>
         <q-btn-dropdown :disabled="this.cartItems.length === 0"
-          icon="shopping_cart" flat class="q-ml-auto">
+          icon="shopping_cart" flat >
+          <center class="q-pt-md">Carrinho de Compras</center>
           <div
             style="height:10vh; padding:20px"
             v-for="item in this.cartItems"
             :key="item.id">
             <div class="row justify-between items-center">
               <q-icon name="library_books" size="50px" color="primary"/>
-              {{ item.title.toLowerCase().substring(0, 30) }}
+              <!-- {{ item.title.toLowerCase().substring(0, 30) }} -->
               <q-btn icon="cancel" flat size="25px" color="red" @click="removeItem(item)"/>
             </div>
           </div>
@@ -162,6 +177,11 @@ export default {
       get () {
         return this.$store.state.cart.items
       }
+    },
+    favorites: {
+      get () {
+        return this.$store.state.user.favorites
+      }
     }
   },
   validations: {
@@ -178,6 +198,12 @@ export default {
   },
   methods: {
     openURL,
+    async unfav (id) {
+      const message = await this.$store.dispatch('user/fav', { id })
+      if (message) {
+        this.$q.notify(message)
+      }
+    },
     removeItem (item) {
       this.$store.dispatch('cart/removeItem', item)
     },
