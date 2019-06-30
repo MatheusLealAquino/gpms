@@ -135,7 +135,6 @@ export default {
         image: this.course.photoUrl,
         title: this.course.title
       })
-      console.log(added)
       if (added) {
         this.$q.notify({ message: 'Adicionado', color: 'positive' })
       } else {

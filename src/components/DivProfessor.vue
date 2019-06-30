@@ -3,7 +3,7 @@
     <a :href="`#/teacher/${id}`">
       <q-card inline style="height:100%">
         <q-card-media>
-          <img :src="image" height="200">
+          <img :src="image" class="professor-image">
         </q-card-media>
         <q-card-title>
           <div :title="name">{{name.length > 26 && $q.platform.is.desktop ? `${name.substring(0,26)}...` : name}}</div>
@@ -42,6 +42,11 @@
 }
 .no_style a:active {
   color:#000000;
+}
+.professor-image {
+  object-fit: cover;
+  height: 300px;
+  width: 100%;
 }
 </style>
 

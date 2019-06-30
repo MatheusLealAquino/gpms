@@ -3,7 +3,7 @@ export function addItem (state, data) {
 }
 
 export function removeItem (state, data) {
-  state.items.filter(el => el.id !== data.id)
+  state.items = state.items.filter(el => el.id !== data.id)
 }
 
 export function removeAll (state) {

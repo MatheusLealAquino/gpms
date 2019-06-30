@@ -1,6 +1,5 @@
 export function addItem (context, data) {
   if (context.state.items.filter(el => el.id === data.id).length === 0) {
-    console.log(data)
     context.commit('addItem', data)
     return true
   } else {
