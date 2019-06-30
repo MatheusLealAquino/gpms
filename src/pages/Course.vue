@@ -1,8 +1,16 @@
 <template>
   <q-page>
     <div class="row gutter-sm header">
-      <div class="col-sm-12 col-md-6 q-pt-md">
-        <img :src="course.photoUrl" height="100%" class="round">
+      <div class="col-sm-12 col-md-6 q-pt-md relative-position">
+        <div class="row justify-center">
+          <q-icon
+            id="course-image-icon"
+            :size="this.favorites.map(el => el.id).includes(this.course.id) ? '130px' : '90px'"
+            name="favorite" flat
+            :color="this.favorites.map(el => el.id).includes(this.course.id) ? 'red' : 'white'"
+            class="q-mb-md"/>
+        </div>
+        <img id="course-image" :src="course.photoUrl" height="100%" @click="fav()">
       </div>
       <div class="col-sm-12 col-md-6 q-pb-md space-inside">
         <h2>{{course.title}}</h2>
@@ -72,6 +80,23 @@
 </template>
 
 <style>
+#course-image {
+  opacity: 1;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+#course-image:hover {
+  opacity: 0.4;
+  cursor: pointer;
+}
+#course-image-icon {
+  opacity: 1;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  transition-duration: 0.5s;
+}
 .header {
   background-color: #505763;
   color: #ffffff;
@@ -79,10 +104,6 @@
 }
 .header h2{
   font-size: 36px;
-}
-.round {
-  width: 100%;
-  border-radius: 3px;
 }
 .space-inside {
   padding-left: 25px !important;
@@ -126,9 +147,20 @@ export default {
       get () {
         return this.$store.state.user
       }
+    },
+    favorites: {
+      get () {
+        return this.$store.state.user.favorites
+      }
     }
   },
   methods: {
+    async fav () {
+      const message = await this.$store.dispatch('user/fav', this.course)
+      if (message) {
+        this.$q.notify(message)
+      }
+    },
     async addToCart () {
       const added = await this.$store.dispatch('cart/addItem', {
         id: this.course.id,

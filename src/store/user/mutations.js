@@ -1,9 +1,9 @@
 export function login (state, data) {
-  console.log(data)
   state.id = data.userId
   state.token = data.id
   state.name = data.realm
   state.email = data.email
+  state.favorites = data.favorites
 }
 
 export function logout (state) {
@@ -11,4 +11,8 @@ export function logout (state) {
   state.token = null
   state.name = null
   state.email = null
+}
+
+export function setFavorites (state, data) {
+  state.favorites = data
 }
