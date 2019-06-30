@@ -28,11 +28,22 @@ export async function logout (context, data) {
 }
 
 export async function fav (context, data) {
-  if (!context.state.id) return 'Usuário deve logar para favoritar'
-  else {
+  if (!context.state.id) {
+    return 'Usuário deve logar para favoritar'
+  } else if (context.state.favorites.map(el => el.id).includes(data.id)) {
     try {
-      await UsersService.create(`${context.state.id}/wishingCourses/${data.id}?access_token=${context.state.token}`)
-      context.commit('fav', data)
+      await UsersService.delete(`${context.state.id}/wishingCourses/rel/${data.id}?access_token=${context.state.token}`)
+      const favCourses = await UsersService.fetch(`${context.state.id}/wishingCourses`)
+      context.commit('setFavorites', favCourses.data)
+      return null
+    } catch (err) {
+      return err
+    }
+  } else {
+    try {
+      await UsersService.update(`${context.state.id}/wishingCourses/rel/${data.id}?access_token=${context.state.token}`)
+      const favCourses = await UsersService.fetch(`${context.state.id}/wishingCourses`)
+      context.commit('setFavorites', favCourses.data)
       return null
     } catch (err) {
       return err

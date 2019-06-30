@@ -13,10 +13,6 @@ export function logout (state) {
   state.email = null
 }
 
-export function fav (state, data) {
-  state.favorites.push(data)
-}
-
-export function unfav (state, data) {
-  state.favorites = state.favorites.filter(el => '' + el.id === '' + data.id)
+export function setFavorites (state, data) {
+  state.favorites = data
 }
