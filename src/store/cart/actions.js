@@ -1,17 +1,18 @@
 export function addItem (context, data) {
-  try {
-    context.commit('addItem', data.item)
+  if (context.state.items.filter(el => el.id === data.id).length === 0) {
+    console.log(data)
+    context.commit('addItem', data)
     return true
-  } catch (err) {
+  } else {
     return false
   }
 }
 
 export function removeItem (context, data) {
-  try {
-    context.commit('removeItem', data.item)
+  if (!context.state.items.filter(el => el.id === data.id).length !== 0) {
+    context.commit('removeItem', data)
     return true
-  } catch (err) {
+  } else {
     return false
   }
 }
