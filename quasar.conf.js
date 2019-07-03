@@ -78,7 +78,8 @@ module.exports = function (ctx) {
         'QModal'
       ],
       directives: [
-        'Ripple'
+        'Ripple',
+        'CloseOverlay'
       ],
       // Quasar plugins
       plugins: [

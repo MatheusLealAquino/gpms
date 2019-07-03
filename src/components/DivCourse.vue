@@ -2,17 +2,17 @@
   <div class="no_style">
     <q-card inline>
       <q-card-media>
-        <a :href="`#/course/${id}`">
-          <img :src="image" class="course-image">
+        <a :href="`#/course/${course.id}`">
+          <img :src="course.photoUrl" class="course-image">
         </a>
       </q-card-media>
       <q-card-title>
-        <div :title="title">{{title.length > 24 && $q.platform.is.desktop ? `${title.substring(0,22)}...` : title}}</div>
-        <q-rating slot="subtitle" v-model="stars" :max="5" :title="stars" readonly/>
+        <div :title="course.title">{{course.title.length > 24 && $q.platform.is.desktop ? `${course.title.substring(0,22)}...` : course.title}}</div>
+        <q-rating slot="subtitle" v-model="course.stars" :max="5" :title="course.stars" readonly/>
       </q-card-title>
       <q-card-main>
-        <p class="text-faded" :title="about">{{about.length > 34 && $q.platform.is.desktop ? `${about.substring(0,35)}...` : about}}</p>
-        <p style="font-size: 20px"><b>Valor:</b> R$ {{`${price.toFixed(2)}`.replace('.', ',')}}</p>
+        <p class="text-faded" :title="course.about">{{course.about.length > 34 && $q.platform.is.desktop ? `${course.about.substring(0,35)}...` : course.about}}</p>
+        <p style="font-size: 20px"><b>Valor:</b> R$ {{`${course.price.toFixed(2)}`.replace('.', ',')}}</p>
       </q-card-main>
       <q-card-separator />
       <q-card-actions class="justify-center">
@@ -47,12 +47,7 @@
 export default {
   title: 'DivCourse',
   props: {
-    stars: Number,
-    title: String,
-    price: Number,
-    about: String,
-    id: Number,
-    image: String
+    course: Object
   },
   data () {
     return {
@@ -60,11 +55,7 @@ export default {
   },
   methods: {
     async addToCart () {
-      const added = await this.$store.dispatch('cart/addItem', {
-        id: this.id,
-        image: this.image,
-        title: this.title
-      })
+      const added = await this.$store.dispatch('cart/addItem', this.course)
       if (added) {
         this.$q.notify({ message: 'Adicionado', color: 'positive' })
       } else {
