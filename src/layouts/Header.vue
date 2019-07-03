@@ -22,30 +22,35 @@
         <q-btn-dropdown :disabled="this.favorites.length === 0"
           icon="favorite" flat class="q-ml-auto">
           <center class="q-pt-md">Lista de Desejos</center>
-          <ul
-            style="height:10vh; padding:20px"
+          <q-list
+            style="height:30vh; padding:20px; overflow-y: scroll;"
             v-for="item in this.favorites"
             :key="item.id">
-            <li class="row justify-between items-center">
-              <q-icon name="favorite" size="50px" color="primary"/>
-              {{ item.title.toLowerCase().substring(0, 30) }}
-              <q-btn icon="cancel" flat size="25px" color="red" @click="unfav(item.id)"/>
-            </li>
-          </ul>
+            <q-item link :to="'/course/'+item.id">
+              <q-icon name="favorite" size="35px" class="q-pr-sm" color="primary"/>
+              <q-item-main :label="item.title.substring(0, 30)" />
+              <q-btn icon="cancel" flat size="15px" color="red" @click="unfav(item.id)"/>
+            </q-item>
+          </q-list>
         </q-btn-dropdown>
         <q-btn-dropdown :disabled="this.cartItems.length === 0"
-          icon="shopping_cart" flat >
-          <center class="q-pt-md">Carrinho de Compras</center>
-          <div
-            style="height:10vh; padding:20px"
-            v-for="item in this.cartItems"
-            :key="item.id">
-            <div class="row justify-between items-center">
-              <q-icon name="library_books" size="50px" color="primary"/>
-              {{ item.title.toLowerCase().substring(0, 30) }}
-              <q-btn icon="cancel" flat size="25px" color="red" @click="removeItem(item)"/>
+          icon="shopping_cart" flat>
+            <center class="q-pt-md">Carrinho de Compras</center>
+            <div style="height:30vh; padding:20px; overflow-y: scroll;">
+              <q-list
+                v-for="item in this.cartItems"
+                :key="item.id">
+                <q-item>
+                  <q-icon name="favorite" size="35px" class="q-pr-sm" color="primary"/>
+                  <q-item-main :label="item.title.substring(0, 30)" />
+                  <q-btn :to="'/course/'+item.id" flat class="q-ml-sm" color="primary" label="Ver"/>
+                  <q-btn icon="cancel" flat size="15px" color="red" v-close-overlay @click="removeItem(item)"/>
+                </q-item>
+              </q-list>
             </div>
-          </div>
+            <div class="text-center">
+              <q-btn class="full-width" color="primary" label="Comprar Cursos" v-close-overlay @click="willBuy = !willBuy"/>
+            </div>
         </q-btn-dropdown>
         <div v-if="userLogged && userState.name">
           Olá, {{userState.name}}
@@ -68,22 +73,22 @@
         inset-delimiter
       >
         <q-item>
-          <q-btn color="black" icon="home" flat label="Início" class="q-mr-sm" to="/"/>
+          <q-btn color="black" icon="home" flat label="Início" class="full-width q-mr-sm" to="/"/>
         </q-item>
         <q-item>
-          <q-btn color="black" icon="timeline" flat label="Timeline" class="q-mr-sm" to="/timeline"/>
+          <q-btn color="black" icon="timeline" flat label="Timeline" class="full-width q-mr-sm" to="/timeline"/>
         </q-item>
         <q-item v-if="userLogged">
-          <q-btn color="black" icon="book" flat label="Meus cursos" class="q-mr-sm" to="/myCourses"/>
+          <q-btn color="black" icon="book" flat label="Meus cursos" class="full-width q-mr-sm" to="/myCourses"/>
         </q-item>
         <q-item v-if="!userLogged">
-          <q-btn color="black" icon="input" flat label="Cadastre-se" class="q-mr-sm" @click="openSignUp=!openSignUp"/>
+          <q-btn color="black" icon="input" flat label="Cadastre-se" class="full-width q-mr-sm" @click="openSignUp=!openSignUp"/>
         </q-item>
         <q-item v-if="!userLogged">
-          <q-btn color="black" icon="settings_power" flat label="Logar" class="q-mr-sm" @click="openSignIn=!openSignIn"/>
+          <q-btn color="black" icon="settings_power" flat label="Logar" class="full-width q-mr-sm" @click="openSignIn=!openSignIn"/>
         </q-item>
         <q-item v-if="userLogged">
-          <q-btn color="black" icon="exit_to_app" flat label="Sair" class="q-mr-sm" @click="makeLogout"/>
+          <q-btn color="black" icon="exit_to_app" flat label="Sair" class="full-width q-mr-sm" @click="makeLogout"/>
         </q-item>
       </q-list>
     </q-layout-drawer>
@@ -91,6 +96,41 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-modal v-model="willBuy">
+      <div class="q-pl-md q-pr-md q-pb-md">
+        <h3>Realizar compra</h3>
+        <div style="height:30vh; overflow-y: scroll;">
+          <q-list
+            v-for="item in this.cartItems"
+            :key="item.id">
+            <q-item>
+              <q-icon name="favorite" size="30px" class="q-pr-sm" color="primary"/>
+              <q-item-main :label="item.title.substring(0, 30)" />
+              <q-btn icon="cancel" flat size="15px" color="red" @click="removeItem(item)"/>
+              <div class="q-pl-sm"> R$ {{item.price.toFixed(2)}} </div>
+            </q-item>
+          </q-list>
+        </div>
+        <q-input class="q-mb-md" v-model="codeDiscount" float-label="Cupom" placeholder="Digite um cupom valido" />
+
+        <div class="q-mb-sm">
+          <b>Total:</b> R$ {{ priceOfCart().toFixed(2) }}<br>
+        </div>
+
+        <q-btn
+          color="negative"
+          @click="closeWillBuy"
+          label="Cancelar"
+        />
+        <q-btn
+          color="positive"
+          class="float-right"
+          @click="buyCourses"
+          label="Comprar"
+        />
+      </div>
+    </q-modal>
 
     <q-modal v-model="openSignUp">
       <div class="q-pl-md q-pr-md q-pb-md">
@@ -150,6 +190,9 @@ export default {
       search: '',
       openSignUp: false,
       openSignIn: false,
+      willBuy: false,
+      codeDiscount: null,
+      totalDiscount: 0,
       login: {
         email: '',
         password: ''
@@ -217,6 +260,22 @@ export default {
       this.openSignUp = false
       this.clearUser()
     },
+    closeWillBuy () {
+      this.willBuy = false
+      this.codeDiscount = null
+    },
+    async buyCourses () {
+      try {
+        this.cartItems.forEach(item => {
+          UsersService.update(`${this.userState.id}/purchasedCourses/rel/${item.id}`)
+          this.removeItem(item)
+        })
+        this.willBuy = false
+        this.$q.notify({ message: 'Curso(s) comprado(s) com sucesso!', color: 'positive' })
+      } catch (err) {
+        console.log(err)
+      }
+    },
     closeSingIn () {
       this.openSignIn = false
       this.clearUser()
@@ -262,6 +321,25 @@ export default {
       this.$store.dispatch('user/logout')
       this.$q.notify({ message: 'Logout realizado com sucesso!', color: 'positive' })
       this.finishRequest = true
+    },
+    priceOfCart () {
+      let final = 0
+      this.cartItems.forEach(item => {
+        final += item.price
+      })
+      return final - this.totalDiscount
+    }
+  },
+  watch: {
+    codeDiscount (newVal, oldVal) {
+      if (newVal) {
+        this.cartItems.forEach(item => {
+          if (newVal === item.code) this.totalDiscount = item.discount
+          else this.totalDiscount = 0
+        })
+      } else {
+        this.totalDiscount = 0
+      }
     }
   }
 }

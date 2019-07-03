@@ -162,11 +162,7 @@ export default {
       }
     },
     async addToCart () {
-      const added = await this.$store.dispatch('cart/addItem', {
-        id: this.course.id,
-        image: this.course.photoUrl,
-        title: this.course.title
-      })
+      const added = await this.$store.dispatch('cart/addItem', this.course)
       if (added) {
         this.$q.notify({ message: 'Adicionado', color: 'positive' })
       } else {
