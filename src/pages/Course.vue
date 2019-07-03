@@ -19,7 +19,6 @@
         <br/> <small>{{course.visualization}} {{course.visualization > 1 || course.visualization === 0 ? 'Visualizações' : 'Visualização'}}</small>
         <p class="q-mt-sm q-mb-md" style="font-size: 20px">R$ {{`${course.price ? course.price.toFixed(2) : ''}`.replace('.', ',')}}</p>
         <q-btn label="Adicionar ao Carrinho" color="negative" text-color="white" class="full-width q-mb-md" @click="addToCart"/>
-        <q-btn label="Comprar" color="white" text-color="black" class="full-width q-mb-md" />
       </div>
     </div>
     <div class="row gutter-sm space-inside">
