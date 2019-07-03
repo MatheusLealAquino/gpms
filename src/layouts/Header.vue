@@ -76,10 +76,10 @@
           <q-btn color="black" icon="home" flat label="Início" class="full-width q-mr-sm" to="/"/>
         </q-item>
         <q-item>
-          <q-btn color="black" icon="timeline" flat label="Timeline" class="full-width q-mr-sm" to="/timeline"/>
+          <q-btn color="black" icon="timeline" flat label="Timeline" class="full-width q-mr-sm" to="/user/timeline"/>
         </q-item>
         <q-item v-if="userLogged">
-          <q-btn color="black" icon="book" flat label="Meus cursos" class="full-width q-mr-sm" to="/myCourses"/>
+          <q-btn color="black" icon="book" flat label="Meus cursos" class="full-width q-mr-sm" to="/user/courses"/>
         </q-item>
         <q-item v-if="!userLogged">
           <q-btn color="black" icon="input" flat label="Cadastre-se" class="full-width q-mr-sm" @click="openSignUp=!openSignUp"/>

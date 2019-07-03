@@ -75,7 +75,9 @@ module.exports = function (ctx) {
         'QCollapsible',
         'QInput',
         'QScrollArea',
-        'QModal'
+        'QModal',
+        'QTimeline',
+        'QTimelineEntry'
       ],
       directives: [
         'Ripple',

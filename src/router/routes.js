@@ -20,6 +20,14 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/Teacher.vue') }
     ]
+  },
+  {
+    path: '/user',
+    component: () => import('layouts/Header.vue'),
+    children: [
+      { path: 'courses', component: () => import('pages/CoursesUser.vue') },
+      { path: 'timeline', component: () => import('pages/Timeline.vue') }
+    ]
   }
 ]
 
